@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context=".ui.signup.SignUpActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.signup.SignUpActivity">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/registerTextView"
@@ -23,135 +23,192 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/fullnameTextView"
+            style="@style/CustomForm.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre completo:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerTextView" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fullnameInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fullnameEditText"
+            style="@style/CustomForm.Input"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
-            android:layout_marginTop="16dp"
-            android:hint="Nombres y Apellidos"
+            android:hint="Escribe tu nombre completo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerTextView">
+            app:layout_constraintTop_toBottomOf="@id/fullnameTextView" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fullnameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
+        <TextView
+            android:id="@+id/emailTextView"
+            style="@style/CustomForm.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Correo electronico:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fullnameEditText" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            style="@style/CustomForm.Input"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
-            android:layout_marginTop="16dp"
-            android:hint="Correo electronico"
+            android:hint="Escribe tu correo electronico"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fullnameInputLayout">
+            app:layout_constraintTop_toBottomOf="@id/emailTextView" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
+        <TextView
+            android:id="@+id/passwordTextView"
+            style="@style/CustomForm.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contraseña:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailEditText" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            style="@style/CustomForm.Input"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
-            android:layout_marginTop="16dp"
-            android:hint="Contraseña"
+            android:hint="Escribe tu contraseña"
+            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailInputLayout">
+            app:layout_constraintTop_toBottomOf="@id/passwordTextView" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordRepeatInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
-            android:layout_marginTop="16dp"
-            android:hint="Confirmar contraseña"
-            app:layout_constraintEnd_toEndOf="parent"
+        <TextView
+            android:id="@+id/passwordRepeatTextView"
+            style="@style/CustomForm.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmar contraseña:"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordInputLayout">
+            app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordRepeatEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordRepeatEditText"
+            android:layout_width="match_parent"
+            style="@style/CustomForm.Input"
+            android:hint="Confirma tu contraseña"
+            android:inputType="textPassword"
+            app:layout_constraintTop_toBottomOf="@id/passwordRepeatTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/countryPhoneCodeInputLayout"
+        <TextView
+            android:id="@+id/phoneTextView"
+            style="@style/CustomForm.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Celular:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordRepeatEditText" />
+
+
+<!--        android:background="@android:drawable/editbox_background"-->
+
+<!--        <androidx.appcompat.widget.AppCompatSpinner-->
+<!--            android:id="@+id/countryPhoneCodeSpinner"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="@dimen/input_height"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:textSize="@dimen/input_font_size"-->
+<!--            android:background="@drawable/background_bordered"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/phoneNumberEditText"-->
+<!--            app:layout_constraintHorizontal_weight="1"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView" />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/countryPhoneCodeView"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="@dimen/input_height"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@id/phoneNumberInputLayout"
+            android:layout_marginTop="4dp"
+            android:textSize="@dimen/input_font_size"
+            android:background="@drawable/background_bordered"
+            app:layout_constraintEnd_toStartOf="@id/phoneNumberEditText"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordRepeatInputLayout"
-            android:hint="+58">
+            app:layout_constraintTop_toBottomOf="@id/phoneTextView">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/countryPhoneCodeEditText"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/flagImageView"
+                android:layout_width="22dp"
+                android:layout_height="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/codeTextView"
+                android:src="@drawable/ve"/>
+
+            <TextView
+                android:id="@+id/codeTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
+                app:layout_constraintStart_toEndOf="@id/flagImageView"
+                app:layout_constraintEnd_toStartOf="@id/arrowImageView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="58"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/arrowImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/codeTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_arrow_down"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneNumberInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneNumberEditText"
             android:layout_width="0dp"
-            android:layout_height="@dimen/input_height"
+            style="@style/CustomForm.Input"
+            android:hint="Escribe tu número de celular"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toEndOf="@id/countryPhoneCodeView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="4.5"
-            app:layout_constraintStart_toEndOf="@id/countryPhoneCodeInputLayout"
-            app:layout_constraintTop_toBottomOf="@id/passwordRepeatInputLayout"
-            android:hint="Escribe tu numero de celular">
+            app:layout_constraintTop_toBottomOf="@id/phoneTextView"
+            tools:ignore="RtlHardcoded" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phoneNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/input_font_size" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+<!--        -->
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/phoneNumberInputLayout"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="16dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:hint="Escribe tu numero de celular"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_weight="4.5"-->
+<!--            app:layout_constraintStart_toEndOf="@id/countryPhoneCodeSpinner"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView">-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
+            android:layout_height="52dp"
             android:layout_marginTop="16dp"
-            android:text="Crear cuenta"
             android:letterSpacing="0"
+            android:text="Crear cuenta"
             android:textAllCaps="false"
             android:textSize="@dimen/input_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phoneNumberInputLayout" />
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

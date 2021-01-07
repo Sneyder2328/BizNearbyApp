@@ -22,4 +22,22 @@
     <style name="Theme.BizNearby.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.BizNearby.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CustomForm">
+
+    </style>
+
+    <style name="CustomForm.Input">
+        <item name="android:layout_height">@dimen/input_height</item>
+        <item name="android:textSize">@dimen/input_font_size</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:background">@drawable/background_bordered</item>
+    </style>
+
+    <style name="CustomForm.Label">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textColor">#404040</item>
+    </style>
 </resources>

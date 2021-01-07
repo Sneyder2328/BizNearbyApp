@@ -36,7 +36,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BizNearby">
-        <activity android:name=".ui.signup.SignUpActivity"></activity>
+        <activity
+            android:name=".ui.signup.SignUpActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:theme="@style/Theme.BizNearby.NoActionBar">
