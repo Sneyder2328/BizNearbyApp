@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <uses-feature
         android:name="android.hardware.location"
         android:required="false" />
@@ -37,6 +36,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BizNearby">
+        <activity android:name=".ui.signup.SignUpActivity"></activity>
         <activity
             android:name=".ui.home.HomeActivity"
             android:theme="@style/Theme.BizNearby.NoActionBar">
@@ -57,7 +57,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
     </application>
 
 </manifest>
