@@ -1,18 +1,19 @@
 plugins {
   id 'com.android.application'
   id 'kotlin-android'
+  id 'kotlin-kapt'
 }
 
 android {
   compileSdkVersion 29
   buildToolsVersion "29.0.3"
-
   defaultConfig {
     applicationId "com.sneyder.biznearby"
     minSdkVersion 16
     targetSdkVersion 29
     versionCode 1
     versionName "1.0"
+    multiDexEnabled true
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -30,6 +31,20 @@ android {
   kotlinOptions {
     jvmTarget = '1.8'
   }
+
+  packagingOptions {
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/license.txt'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/NOTICE.txt'
+    exclude 'META-INF/notice.txt'
+    exclude 'META-INF/ASL2.0'
+    exclude 'META-INF/AL2.0'
+    exclude 'META-INF/LGPL2.1'
+    exclude("META-INF/*.kotlin_module")
+  }
 }
 
 dependencies {
@@ -46,6 +61,32 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
   implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
   implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+
+  // Multidex
+  implementation 'androidx.multidex:multidex:2.0.1'
+
+  // Timber
+  implementation 'com.jakewharton.timber:timber:4.7.1'
+
+  // Dagger
+  implementation 'com.google.dagger:dagger:2.17'
+  implementation 'com.google.dagger:dagger-android-support:2.17' // dont change because it gives probllems in compile time
+  kapt 'com.google.dagger:dagger-compiler:2.17'
+  kapt 'com.google.dagger:dagger-android-processor:2.17'
+
+  // Retrofit
+  implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+  implementation 'com.squareup.retrofit2:adapter-rxjava:2.9.0'
+  implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+  implementation 'com.squareup.okio:okio:2.8.0'
+
+  // Analise network traffic
+  implementation 'com.facebook.stetho:stetho:1.5.1'
+  // for OkHttp3, if you're using an older version,
+  // check the stetho website
+  implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
+
   testImplementation 'junit:junit:4.+'
   androidTestImplementation 'androidx.test.ext:junit:1.1.2'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
