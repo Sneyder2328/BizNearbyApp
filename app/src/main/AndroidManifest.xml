@@ -8,6 +8,9 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.location"
@@ -37,6 +40,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BizNearby">
         <activity
+            android:name=".ui.login.LogInActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
             android:name=".ui.signup.SignUpActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -58,7 +64,39 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key" /> <!-- Necessary for Facebook login SDK -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+<!--        <activity-->
+<!--            android:name="com.facebook.FacebookActivity"-->
+<!--            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+<!--            android:label="@string/app_name" />-->
+<!--        <activity-->
+<!--            android:name="com.facebook.CustomTabActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data android:scheme="@string/fb_login_protocol_scheme" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <!-- Used to use URIs inside the app in android Nougat and later -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.sneyder.biznearby.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

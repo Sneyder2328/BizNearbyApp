@@ -100,8 +100,7 @@ dependencies {
   // check the stetho website
   implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
-  // FB login
-  implementation 'com.facebook.android:facebook-login:4.42.0'
+  // FB login, add sdk manually
 
   // Google login
   implementation 'com.google.android.gms:play-services-auth:19.0.0'

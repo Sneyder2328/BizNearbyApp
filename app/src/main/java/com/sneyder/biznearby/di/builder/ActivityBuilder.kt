@@ -16,6 +16,11 @@
 
 package com.sneyder.biznearby.di.builder
 
+import com.sneyder.biznearby.ui.home.HomeActivity
+import com.sneyder.biznearby.ui.home.HomeFragment
+import com.sneyder.biznearby.ui.home.HomeProvider
+import com.sneyder.biznearby.ui.login.LogInActivity
+import com.sneyder.biznearby.ui.signup.SignUpActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -23,10 +28,16 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBuilder {
 
-//    @ContributesAndroidInjector(modules = [CategoriesProvider::class, PersonsProvider::class, StatusesProvider::class, StandByProvider::class, AsistenciaProvider::class, DocsProvider::class])
-//    abstract fun bindMainActivity(): MainActivity
+    @ContributesAndroidInjector(modules = [HomeProvider::class])
+    abstract fun bindHomeActivity(): HomeActivity
 //
 //    @ContributesAndroidInjector()
 //    abstract fun bindAddStatusActivity(): AddStatusActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindSignUpActivity(): SignUpActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindLogInActivity(): LogInActivity
 
 }

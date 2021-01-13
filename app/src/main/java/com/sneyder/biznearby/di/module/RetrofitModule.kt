@@ -23,7 +23,7 @@ class RetrofitModule {
         return OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)// TODO add interceptor po provide for more time in case of a long request like aptos/noAptos request
+            .readTimeout(30, TimeUnit.SECONDS)
             .addNetworkInterceptor(StethoInterceptor())
             .retryOnConnectionFailure(true)
             .build()
@@ -32,6 +32,7 @@ class RetrofitModule {
     @Provides
     @Singleton
     fun gson(): Gson = GsonBuilder()
+        .setLenient()
         .setLenient()
         .create()
 

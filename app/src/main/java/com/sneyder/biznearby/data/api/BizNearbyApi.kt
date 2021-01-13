@@ -1,14 +1,24 @@
 package com.sneyder.biznearby.data.api
 
+import com.sneyder.biznearby.data.model.auth.LogInRequest
+import com.sneyder.biznearby.data.model.auth.LogOutResponse
+import com.sneyder.biznearby.data.model.user.UserProfile
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.*
+
+fun genRequestBody(content: String) = RequestBody.create(MultipartBody.FORM, content)
 
 interface BizNearbyApi {
 
     companion object {
         const val END_POINT = "https://biznearby.herokuapp.com/"
 
-//        const val FIND_PERSONS = "maestros/persons"
-//        const val ADD_PERSON = "maestros/persons/"
+        const val SIGN_UP = "users"
+        const val LOG_IN = "sessions"
+        const val LOG_OUT = "sessions"
+
     }
 
 //    @GET(APTOS)
@@ -30,16 +40,28 @@ interface BizNearbyApi {
 //        @Path("userId") userId: String,
 //        @Body firebaseTokenId: FirebaseTokenId
 //    ): FirebaseTokenId
-//
-//    @POST(LOG_IN)
-//    suspend fun logIn(
-//        @Body logInRequest: LogInRequest
-//    ): LogInResponse
-//
-//    @POST(LOG_OUT)
-//    suspend fun logOut(
-//        @Body logOutRequest: LogOutRequest
-//    ): LogOutResponse
+
+    @Multipart
+    @POST(SIGN_UP)
+    suspend fun signUp(
+        @Part("id") id: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("fullname") fullname: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("typeLogin") typeLogin: RequestBody,
+        @Part("thumbnailUrl") thumbnailUrl: RequestBody,
+        @Part imageProfile: MultipartBody.Part? = null,
+    ): Response<UserProfile>
+
+    @POST(LOG_IN)
+    suspend fun logIn(
+        @Body request: LogInRequest
+    ): UserProfile
+
+    @DELETE(LOG_OUT)
+    suspend fun logOut(
+        @Header("Authorization") authorization: String?
+    ): LogOutResponse
 
 
 }

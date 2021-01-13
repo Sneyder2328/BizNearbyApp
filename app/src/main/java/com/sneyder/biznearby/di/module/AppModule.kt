@@ -20,7 +20,8 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.sneyder.biznearby.di.module.ViewModelModule
+import com.sneyder.biznearby.data.preferences.AppPreferencesHelper
+import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.coroutines.AppCoroutineContextProvider
 import com.sneyder.biznearby.utils.coroutines.CoroutineContextProvider
 import dagger.Binds
@@ -36,9 +37,9 @@ abstract class AppModule {
     @Reusable
     abstract fun provideContext(application: Application): Context
 
-//    @Binds
-//    @Reusable
-//    abstract fun providePreferencesHelper(appPreferencesHelper: AppPreferencesHelper): PreferencesHelper
+    @Binds
+    @Reusable
+    abstract fun providePreferencesHelper(appPreferencesHelper: AppPreferencesHelper): PreferencesHelper
 
     @Module
     companion object {

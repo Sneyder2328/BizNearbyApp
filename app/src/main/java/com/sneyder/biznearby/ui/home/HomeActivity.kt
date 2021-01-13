@@ -1,6 +1,5 @@
 package com.sneyder.biznearby.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Button
@@ -10,13 +9,13 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.sneyder.biznearby.R
-import com.sneyder.biznearby.ui.signup.SignUpActivity
+import com.sneyder.biznearby.ui.login.LogInActivity
+import com.sneyder.biznearby.utils.base.DaggerActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : DaggerActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val headerView by lazy { navView.getHeaderView(0) }
@@ -41,7 +40,7 @@ class HomeActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         logInButton.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
+            startActivity(LogInActivity.starterIntent(this))
         }
     }
 

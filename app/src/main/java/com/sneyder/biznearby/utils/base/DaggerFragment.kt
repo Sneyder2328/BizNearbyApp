@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.oesvica.appibartiFace.utils.base
+package com.sneyder.biznearby.utils.base
 
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.DaggerFragment
