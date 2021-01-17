@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
@@ -24,9 +25,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.auth.TypeLogin
-import com.sneyder.biznearby.utils.ImageSelectorUtils
+import com.sneyder.biznearby.ui.home.HomeActivity
+import com.sneyder.biznearby.utils.*
 import com.sneyder.biznearby.utils.base.DaggerActivity
-import com.sneyder.biznearby.utils.debug
 import com.sneyder.biznearby.utils.dialogs.SelectImageDialog
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.io.File
@@ -34,8 +35,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-data class Country(val name: String, val code: String, @DrawableRes val icon: Int)
+data class Country(val name: String, val phoneCode: String, @DrawableRes val icon: Int)
 
 val countries = arrayOf(
     Country("Venezuela", "58", R.drawable.ve),
@@ -78,7 +78,7 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
 
     private var countrySelected = 0
         set(value) {
-            codeTextView?.text = countries[value].code
+            phoneCodeTextView?.text = countries[value].phoneCode
             flagImageView?.setImageResource(countries[value].icon)
             field = value
         }
@@ -89,7 +89,8 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
         set(value) {
             field = value
             debug("set imageProfilePath = $value")
-            Glide.with(this).load(value).placeholder(R.drawable.person_placeholder).into(photoImageView)
+            Glide.with(this).load(value).placeholder(R.drawable.person_placeholder)
+                .into(photoImageView)
         }
     private val viewModel: SignUpViewModel by viewModels { viewModelFactory }
 
@@ -106,16 +107,81 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
         signUpButton.setOnClickListener { signUpWithEmail() }
         setUpGoogleLogin()
         //setUpFacebookLogin()
+        observeUserCreated()
+    }
+
+    private fun observeUserCreated() {
+        viewModel.userCreated.observe(this) {
+            debug("observeUserCreated $it")
+            when {
+                it.isLoading -> {
+                    linealProgressIndicator.visibility = View.VISIBLE
+                    creatingAccountTextView.visibility = View.VISIBLE
+                }
+                it.success != null -> {
+                    startActivity(HomeActivity.starterIntent(this))
+                    finish()
+                }
+                it.error != null -> {
+                    it.error.printStackTrace()
+                    signUpLayout.displayLongTextSnackBar(it.error.message ?: return@observe)
+                    linealProgressIndicator.visibility = View.INVISIBLE
+                    creatingAccountTextView.visibility = View.INVISIBLE
+                }
+            }
+        }
     }
 
     private fun signUpWithEmail() {
-        val fullname = fullnameEditText.text.toString()
-        val email = emailEditText.text.toString()
-        val password = passwordEditText.text.toString()
-        val repeatPassword = passwordRepeatEditText.text.toString()
-        val phoneNumber = phoneNumberEditText.text.toString()
+        val fieldsValidator = FieldsValidator()
+        val fullname = InputValidator.Builder(fullnameEditText)
+            .maxLength(70, "Nombre demasiado largo")
+            .minLength(4, "Ingrese al menos 4 caracteres")
+            .required(message = "Por favor ingresar su nombre completo")
+            .build(fieldsValidator)
+        val email = InputValidator.Builder(emailEditText)
+            .maxLength(255, "Correo electornico demasiado largo")
+            .minLength(4, "Ingrese al menos 4 caracteres")
+            .required(message = "Por favor ingresar su correo electronico")
+            .build(fieldsValidator)
+        val password = InputValidator.Builder(passwordEditText)
+            .maxLength(256, "Contraseña demasiado larga")
+            .minLength(8, "Ingrese al menos 8 caracteres")
+            .required(message = "Por favor ingresar una contraseña")
+            .build(fieldsValidator)
+        val repeatPassword = InputValidator.Builder(passwordRepeatEditText)
+            .maxLength(256)
+            .minLength(8)
+            .required(message = "Por favor ingresar su contraseña de nuevo")
+            .build(fieldsValidator)
+        val phoneNumber = InputValidator.Builder(phoneNumberEditText) { removeLeadingZeroes(it) }
+            .maxLength(15, "Maximo 15 caracteres")
+            .minLength(4, "Minimo 4 caracteres")
+            .required(false)
+            .build(fieldsValidator)
+        if (!fieldsValidator.allInputsValid()) return
+        if (password != repeatPassword) {
+            passwordRepeatEditText.error = "Las contraseñas no coinciden"
+            return
+        }
 
-        viewModel.signUp(fullname = fullname, email = email, password = password, typeLogin = TypeLogin.Email, imageProfilePath = imageProfilePath)
+        viewModel.signUp(
+            fullname = fullname,
+            email = email,
+            password = password,
+            typeLogin = TypeLogin.EMAIL,
+            imageProfilePath = imageProfilePath,
+            phoneNumber = "+${phoneCodeTextView.text}$phoneNumber"
+        )
+    }
+
+    private fun removeLeadingZeroes(str: String): String {
+        str.forEachIndexed { index, char ->
+            if (char != '0') {
+                return str.substring(index)
+            }
+        }
+        return ""
     }
 
     private fun showPickImageBottomSheet() {

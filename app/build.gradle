@@ -15,6 +15,9 @@ android {
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
+    vectorDrawables{
+      useSupportLibrary true
+    }
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -68,7 +71,7 @@ dependencies {
   implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
   implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
-  implementation 'com.google.android.material:material:1.2.1'
+  implementation 'com.google.android.material:material:1.3.0-beta01'
 
   // Maps
   implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -84,7 +87,9 @@ dependencies {
 
   // Dagger
   implementation 'com.google.dagger:dagger:2.17'
-  implementation 'com.google.dagger:dagger-android-support:2.17' // dont change because it gives probllems in compile time
+  implementation 'com.google.dagger:dagger-android-support:2.17'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+// dont change because it gives probllems in compile time
   kapt 'com.google.dagger:dagger-compiler:2.17'
   kapt 'com.google.dagger:dagger-android-processor:2.17'
 

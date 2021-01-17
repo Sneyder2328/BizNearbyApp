@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        tools:context=".ui.add_business.AddBusinessFragment">
+
+        <ImageView
+            android:id="@+id/bannerImageView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="#03A9F4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameEditText"
+            style="@style/CustomForm.Input"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre del negocio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bannerImageView" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionEditText"
+            style="@style/CustomForm.Input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:hint="Descripcion"
+            android:maxHeight="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameEditText" />
+
+        <TextView
+            android:id="@+id/addressTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Dirección:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cityEditText"
+            style="@style/CustomForm.Input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:hint="Descripcion de la direccion"
+            android:maxHeight="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addressTextView" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addressEditText"
+            style="@style/CustomForm.Input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:hint="Descripcion de la direccion"
+            android:maxHeight="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityEditText" />
+
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Categoria(s):"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addressEditText" />
+
+        <HorizontalScrollView
+            android:id="@+id/categoriesScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/categoryTextView">
+
+            <LinearLayout
+                android:id="@+id/categoriesLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/addCategoryChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@drawable/ic_baseline_add_24" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/scheduleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Horarios:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/categoriesScrollView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/mondayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="L"
+            app:layout_constraintEnd_toStartOf="@id/tuesdayChip"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/tuesdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="M"
+            app:layout_constraintEnd_toStartOf="@id/wednesdayChip"
+            app:layout_constraintStart_toEndOf="@id/mondayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/wednesdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="M"
+            app:layout_constraintEnd_toStartOf="@id/thursDayChip"
+            app:layout_constraintStart_toEndOf="@id/tuesdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/thursDayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="J"
+            app:layout_constraintEnd_toStartOf="@id/fridayChip"
+            app:layout_constraintStart_toEndOf="@id/wednesdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fridayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="V"
+            app:layout_constraintEnd_toStartOf="@id/saturdayChip"
+            app:layout_constraintStart_toEndOf="@id/thursDayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/saturdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="S"
+            app:layout_constraintEnd_toStartOf="@id/sundayChip"
+            app:layout_constraintStart_toEndOf="@id/fridayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sundayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="D"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/saturdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <CheckBox
+            android:id="@+id/open24HrsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abierto 24 horas"
+            app:layout_constraintEnd_toStartOf="@id/closedCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mondayChip" />
+
+        <CheckBox
+            android:id="@+id/closedCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Cerrado"
+            app:layout_constraintStart_toEndOf="@id/open24HrsCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/mondayChip" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addHoursButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar horas"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/open24HrsCheckBox" />
+
+        <TextView
+            android:id="@+id/imagesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imagenes:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addHoursButton" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagesTextView"
+            tools:listitem="@layout/business_image_item"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:span="3"
+            tools:itemCount="3"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

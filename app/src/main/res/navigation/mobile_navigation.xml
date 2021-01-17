@@ -3,11 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_explore">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.sneyder.biznearby.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_explore"
+        android:name="com.sneyder.biznearby.ui.explore.ExploreFragment"
+        android:label="@string/menu_explore"
+        tools:layout="@layout/fragment_explore" />
+
+    <fragment
+        android:id="@+id/nav_add_business"
+        android:name="com.sneyder.biznearby.ui.add_business.AddBusinessFragment"
+        android:label="Nuevo registro"
+        tools:layout="@layout/fragment_add_business" />
 </navigation>

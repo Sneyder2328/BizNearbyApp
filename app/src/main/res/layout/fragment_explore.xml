@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.explore.ExploreFragment"
+    android:focusable="false"
+    android:focusableInTouchMode="false" >
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -16,8 +18,8 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="#fff"
-        android:elevation="4dp"
         android:layout_margin="12dp"
+        android:elevation="4dp"
         android:hint="Busqueda..." />
 
 </FrameLayout>

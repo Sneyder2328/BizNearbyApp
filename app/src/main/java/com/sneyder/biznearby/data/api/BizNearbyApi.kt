@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
-fun genRequestBody(content: String) = RequestBody.create(MultipartBody.FORM, content)
+fun genRequestBody(content: String): RequestBody = RequestBody.create(MultipartBody.FORM, content)
 
 interface BizNearbyApi {
 
@@ -18,15 +18,15 @@ interface BizNearbyApi {
         const val SIGN_UP = "users"
         const val LOG_IN = "sessions"
         const val LOG_OUT = "sessions"
+        const val GET_USER_PROFILE = "users/{userId}/"
 
     }
 
-//    @GET(APTOS)
-//    suspend fun getAptos(
-//        @Header("Authorization") authorization: String?,
-//        @Path("iniDate") iniDate: String,
-//        @Path("endDate") endDate: String
-//    ): List<CedulasByDate>
+    @GET(GET_USER_PROFILE)
+    suspend fun getUserProfile(
+        @Header("Authorization") authorization: String?,
+        @Path("userId") userId: String
+    ): UserProfile
 //
 //    @GET(NO_APTOS)
 //    suspend fun getNoAptos(
@@ -56,7 +56,7 @@ interface BizNearbyApi {
     @POST(LOG_IN)
     suspend fun logIn(
         @Body request: LogInRequest
-    ): UserProfile
+    ): Response<UserProfile>
 
     @DELETE(LOG_OUT)
     suspend fun logOut(

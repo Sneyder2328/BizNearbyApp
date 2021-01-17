@@ -21,6 +21,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import java.io.UnsupportedEncodingException
 import com.sneyder.biznearby.data.model.Result
+import java.lang.NullPointerException
 
 
 fun View.displayLongTextSnackBar(message: String) {
@@ -135,11 +136,15 @@ fun Context.toggleSoftInput() {
 }
 
 
-suspend fun <T> mapToResult(sth: suspend () -> T): Result<T> {
+suspend fun <T> mapToResult(sth: suspend () -> T?, onFinally: () -> Unit = {}): Result<T> {
     return try {
-        Result(sth())
+        if (sth() == null) throw NullPointerException()
+        Result(sth()).also {
+            onFinally()
+        }
     } catch (e: Exception) {
         e.printStackTrace()
+        onFinally()
         Result(error = e)
     }
 }

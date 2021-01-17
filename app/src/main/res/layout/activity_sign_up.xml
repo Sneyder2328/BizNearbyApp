@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:id="@+id/signUpLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,25 +31,25 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/registerTextView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/registerTextView">
 
             <com.sneyder.biznearby.utils.CircleImageView
                 android:id="@+id/photoImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:src="@drawable/person_placeholder"/>
+                android:src="@drawable/person_placeholder" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/cameraButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
                 android:src="@drawable/ic_camera_24"
-                app:fabSize="mini"
                 app:elevation="0dp"
-                android:layout_gravity="bottom|right"/>
+                app:fabSize="mini" />
         </FrameLayout>
 
         <TextView
@@ -81,8 +83,8 @@
             android:id="@+id/emailEditText"
             style="@style/CustomForm.Input"
             android:layout_width="match_parent"
-            android:inputType="textEmailAddress"
             android:hint="Escribe tu correo electronico"
+            android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/emailTextView" />
@@ -117,13 +119,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordRepeatEditText"
-            android:layout_width="match_parent"
             style="@style/CustomForm.Input"
+            android:layout_width="match_parent"
             android:hint="Confirma tu contraseña"
             android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@id/passwordRepeatTextView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/passwordRepeatTextView" />
 
 
         <TextView
@@ -136,20 +138,20 @@
             app:layout_constraintTop_toBottomOf="@id/passwordRepeatEditText" />
 
 
-<!--        android:background="@android:drawable/editbox_background"-->
+        <!--        android:background="@android:drawable/editbox_background"-->
 
-<!--        <androidx.appcompat.widget.AppCompatSpinner-->
-<!--            android:id="@+id/countryPhoneCodeSpinner"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="@dimen/input_height"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:textSize="@dimen/input_font_size"-->
-<!--            android:background="@drawable/background_bordered"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/phoneNumberEditText"-->
-<!--            app:layout_constraintHorizontal_weight="1"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView" />-->
+        <!--        <androidx.appcompat.widget.AppCompatSpinner-->
+        <!--            android:id="@+id/countryPhoneCodeSpinner"-->
+        <!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="@dimen/input_height"-->
+        <!--            android:layout_marginTop="4dp"-->
+        <!--            android:textSize="@dimen/input_font_size"-->
+        <!--            android:background="@drawable/background_bordered"-->
+        <!--            app:layout_constraintEnd_toStartOf="@id/phoneNumberEditText"-->
+        <!--            app:layout_constraintHorizontal_weight="1"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/countryPhoneCodeView"
@@ -157,8 +159,8 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/input_height"
             android:layout_marginTop="4dp"
-            android:textSize="@dimen/input_font_size"
             android:background="@drawable/background_bordered"
+            android:textSize="@dimen/input_font_size"
             app:layout_constraintEnd_toStartOf="@id/phoneNumberEditText"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -168,63 +170,61 @@
                 android:id="@+id/flagImageView"
                 android:layout_width="22dp"
                 android:layout_height="14dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ve"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/phoneCodeTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/codeTextView"
-                android:src="@drawable/ve"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/codeTextView"
+                android:id="@+id/phoneCodeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/flagImageView"
-                app:layout_constraintEnd_toStartOf="@id/arrowImageView"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="58"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:text="58"/>
+                app:layout_constraintEnd_toStartOf="@id/arrowImageView"
+                app:layout_constraintStart_toEndOf="@id/flagImageView"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/arrowImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_arrow_down"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/codeTextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_arrow_down"/>
+                app:layout_constraintStart_toEndOf="@id/phoneCodeTextView"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phoneNumberEditText"
-            android:layout_width="0dp"
             style="@style/CustomForm.Input"
-            android:hint="Escribe tu número de celular"
+            android:layout_width="0dp"
             android:layout_marginLeft="16dp"
+            android:hint="Escribe tu número de celular"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintStart_toEndOf="@id/countryPhoneCodeView"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phoneTextView"
             tools:ignore="RtlHardcoded" />
 
-<!--        -->
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/phoneNumberInputLayout"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="16dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:hint="Escribe tu numero de celular"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_weight="4.5"-->
-<!--            app:layout_constraintStart_toEndOf="@id/countryPhoneCodeSpinner"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView">-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
+        <!--        -->
+        <!--        <com.google.android.material.textfield.TextInputLayout-->
+        <!--            android:id="@+id/phoneNumberInputLayout"-->
+        <!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="16dp"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:hint="Escribe tu numero de celular"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_weight="4.5"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/countryPhoneCodeSpinner"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/phoneTextView">-->
+        <!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signUpButton"
@@ -240,65 +240,90 @@
             app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linealProgressIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:indeterminate="true"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpButton"/>
+
+        <TextView
+            android:id="@+id/creatingAccountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creando cuenta..."
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textSize="16sp"
+            android:textColor="#434343"
+            app:layout_constraintTop_toBottomOf="@id/linealProgressIndicator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <View
             android:id="@+id/line1"
             android:layout_width="wrap_content"
             android:layout_height="1px"
-            android:background="#000"
             android:layout_marginTop="20dp"
+            android:background="#000"
+            app:layout_constraintEnd_toStartOf="@id/orTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpButton"
-            app:layout_constraintEnd_toStartOf="@id/orTextView"/>
+            app:layout_constraintTop_toBottomOf="@id/creatingAccountTextView" />
 
         <TextView
             android:id="@+id/orTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintTop_toTopOf="@id/line1"
+            android:layout_marginRight="8dp"
+            android:text="o"
             app:layout_constraintBottom_toBottomOf="@id/line1"
-            app:layout_constraintStart_toEndOf="@id/line1"
             app:layout_constraintEnd_toStartOf="@id/line2"
-            android:text="o" />
+            app:layout_constraintStart_toEndOf="@id/line1"
+            app:layout_constraintTop_toTopOf="@id/line1" />
 
         <View
             android:id="@+id/line2"
             android:layout_width="wrap_content"
             android:layout_height="1px"
-            android:background="#000"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toEndOf="@id/orTextView"
+            android:background="#000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpButton" />
+            app:layout_constraintStart_toEndOf="@id/orTextView"
+            app:layout_constraintTop_toBottomOf="@id/creatingAccountTextView" />
 
-<!--        <com.facebook.login.widget.LoginButton-->
-<!--            android:id="@+id/signUpFacebookButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/signUpButton"/>-->
+        <!--        <com.facebook.login.widget.LoginButton-->
+        <!--            android:id="@+id/signUpFacebookButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/signUpButton"/>-->
 
         <Button
             android:id="@+id/signUpFacebookButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FB"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="FB"
             app:layout_constraintEnd_toStartOf="@id/signUpGoogleButton"
-            app:layout_constraintTop_toBottomOf="@id/line1"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line1" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signUpGoogleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/signUpFacebookButton"
             app:layout_constraintBottom_toBottomOf="@id/signUpFacebookButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/signUpFacebookButton"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/signUpFacebookButton" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

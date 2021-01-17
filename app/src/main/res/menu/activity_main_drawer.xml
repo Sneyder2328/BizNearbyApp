@@ -5,8 +5,32 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_explore_24"
+            android:title="@string/menu_explore" />
+        <item
+            android:id="@+id/nav_add_business"
+            android:icon="@drawable/ic_baseline_add_business_24"
+            android:visible="false"
+            tools:visible="true"
+            android:title="Registrar negocio" />
+        <item
+            android:id="@+id/nav_my_businesses"
+            android:icon="@drawable/ic_baseline_business_24"
+            android:visible="false"
+            tools:visible="true"
+            android:title="Mis negocios" />
+        <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/ic_baseline_fact_check_24"
+            android:visible="false"
+            tools:visible="true"
+            android:title="Reportes" />
+        <item
+            android:id="@+id/nav_moderators"
+            android:icon="@drawable/ic_explore_24"
+            android:visible="false"
+            tools:visible="true"
+            android:title="Moderadores" />
     </group>
 </menu>

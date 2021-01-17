@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/openTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/separator"
+        android:hint="Hora inicial"/>
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="@id/openTime"
+        app:layout_constraintStart_toEndOf="@id/openTime"
+        app:layout_constraintEnd_toStartOf="@id/closeTime"
+        app:layout_constraintBottom_toBottomOf="@id/openTime"
+        app:srcCompat="@drawable/ic_baseline_horizontal_rule_24"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/closeTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintStart_toEndOf="@id/separator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/removeImageView"
+        android:hint="Hora Final"/>
+
+    <ImageView
+        android:id="@+id/removeImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="@id/closeTime"
+        app:layout_constraintStart_toEndOf="@id/closeTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/closeTime"
+        app:srcCompat="@drawable/ic_baseline_close_24"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.sneyder.biznearby.ui.home
+package com.sneyder.biznearby.ui.explore
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -15,9 +15,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
 
-class HomeFragment : DaggerFragment(), OnMapReadyCallback {
+class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
 
-    private val homeViewModel: HomeViewModel by viewModels { viewModelFactory }
+    private val exploreViewModel: ExploreViewModel by viewModels { viewModelFactory }
     private lateinit var mMap: GoogleMap
     private lateinit var mapView: MapView
 
@@ -26,7 +26,7 @@ class HomeFragment : DaggerFragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_explore, container, false)
 
         mapView = view.findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)

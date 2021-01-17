@@ -1,9 +1,9 @@
-package com.sneyder.biznearby.ui.signup
+package com.sneyder.biznearby.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sneyder.biznearby.data.model.Result
-import com.sneyder.biznearby.data.model.auth.SignUpRequest
+import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.TypeLogin
 import com.sneyder.biznearby.data.model.user.UserProfile
 import com.sneyder.biznearby.data.repository.UserRepository
@@ -12,41 +12,34 @@ import com.sneyder.biznearby.utils.coroutines.CoroutineContextProvider
 import com.sneyder.biznearby.utils.debug
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
-class SignUpViewModel
+class LogInViewModel
 @Inject constructor(
     private val userRepository: UserRepository,
     coroutineContextProvider: CoroutineContextProvider
 ) : BaseViewModel(coroutineContextProvider) {
 
-    val userCreated by lazy { MutableLiveData<Result<UserProfile>>() }
+    val userLoggedIn by lazy { MutableLiveData<Result<UserProfile>>() }
 
-    fun signUp(
+    fun logIn(
         email: String,
-        password: String?,
-        fullname: String,
-        typeLogin: TypeLogin,
-        imageProfilePath: String? = null,
-        phoneNumber: String
+        password: String,
+        typeLogin: TypeLogin
     ) {
-        debug("signUp")
+        debug("logIn $email $password $typeLogin")
         viewModelScope.launch {
             val result = withContext(IO) {
-                userRepository.signUp(
-                    SignUpRequest(
-                        id = UUID.randomUUID().toString(),
+                userRepository.logIn(
+                    LogInRequest(
                         email = email,
                         password = password,
-                        fullname = fullname,
-                        typeLogin = typeLogin.type,
-                        imageProfilePath = imageProfilePath,
-                        phoneNumber = phoneNumber
+                        typeLogin = typeLogin.type
                     )
                 )
             }
-            userCreated.value = result
+            userLoggedIn.value = result
         }
     }
+
 }

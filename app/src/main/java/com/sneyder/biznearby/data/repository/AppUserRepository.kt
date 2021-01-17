@@ -1,7 +1,7 @@
 package com.sneyder.biznearby.data.repository
 
 import android.webkit.MimeTypeMap
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.sneyder.biznearby.data.api.BizNearbyApi
 import com.sneyder.biznearby.data.api.genRequestBody
 import com.sneyder.biznearby.data.model.Result
@@ -9,6 +9,7 @@ import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.LogOutResponse
 import com.sneyder.biznearby.data.model.auth.SignUpRequest
 import com.sneyder.biznearby.data.model.user.UserProfile
+import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.ACCESS_TOKEN
 import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.USER
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.debug
@@ -17,6 +18,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,19 +31,43 @@ class AppUserRepository
 //    private val appDatabase: AppDatabase
 ) : UserRepository() {
 
-    override fun getCurrentUserProfile(): UserProfile {
-        val json: String? = prefs[USER]
-        return Gson().fromJson(json, UserProfile::class.java)
-//        return UserProfile(
-//            id = prefs[""],
-//        )
+    override fun getCurrentUserProfile(): UserProfile? {
+        val json: String = prefs[USER] ?: return null
+        return try {
+            GsonBuilder().serializeNulls().create()
+                .fromJson(json, UserProfile::class.java)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
-    fun getMimeType(url: String?): String? {
+    private fun getAccessToken(): String {
+        val token: String = prefs[ACCESS_TOKEN] ?: ""
+        return "Bearer $token"
+    }
+
+    override suspend fun fetchUserProfile(userId: String): Result<UserProfile> {
+        return mapToResult({
+            bizNearbyApi.getUserProfile(
+                authorization = getAccessToken(),
+                userId = userId
+            )
+        })
+    }
+
+
+    /**
+     * More info at: https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android/39923767#39923767
+     */
+    private fun getMimeType(url: String?): String {
         var type: String? = null
         val extension = MimeTypeMap.getFileExtensionFromUrl(url)
         if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase(Locale.ROOT))
+        }
+        if (type == null) {
+            type = "image/*" // fallback type. You might set it to */*
         }
         return type
     }
@@ -55,29 +81,52 @@ class AppUserRepository
             return@let MultipartBody.Part.createFormData("imageProfile", file.name, requestBody)
         }
 
-        val user = bizNearbyApi.signUp(
+        val response = bizNearbyApi.signUp(
             id = genRequestBody(request.id),
             email = genRequestBody(request.email),
             password = genRequestBody(request.password ?: ""),
             typeLogin = genRequestBody(request.typeLogin),
             fullname = genRequestBody(request.fullname),
-            thumbnailUrl = genRequestBody("sample.jpg"),
+            thumbnailUrl = genRequestBody(request.thumbnailUrl ?: ""),
             imageProfile = imageProfile
         )
-        debug("signUp request=$request")
-        debug("signUp user body=${user.body()}")
-        debug("signUp user headers=${user.headers()}")
-        return mapToResult {
-            user.body()!!
+        response.headers().get(ACCESS_TOKEN)?.let {
+            prefs[ACCESS_TOKEN] = it
         }
+        response.body()?.let {
+            val toJson = GsonBuilder().serializeNulls().create().toJson(it)
+            debug("user saved to prefs=$toJson")
+            prefs[USER] = toJson
+        }
+
+        return mapToResult({
+            response.body()
+        })
     }
 
     override suspend fun logIn(request: LogInRequest): Result<UserProfile> {
-        TODO("Not yet implemented")
+        val response = bizNearbyApi.logIn(request)
+         response.headers().get(ACCESS_TOKEN)?.let {
+            prefs[ACCESS_TOKEN] = it
+        }
+        response.body()?.let {
+            val toJson = GsonBuilder().serializeNulls().create().toJson(it)
+            debug("user saved to prefs=$toJson")
+            prefs[USER] = toJson
+        }
+
+        return mapToResult({
+            response.body()
+        })
     }
 
     override suspend fun logOut(): Result<LogOutResponse> {
-        TODO("Not yet implemented")
+        return mapToResult({
+            bizNearbyApi.logOut(authorization = getAccessToken())
+        }, onFinally = {
+            prefs[USER] = ""
+            prefs[ACCESS_TOKEN] = ""
+        })
     }
 
     //

@@ -1,13 +1,13 @@
-package com.sneyder.biznearby.ui.home
+package com.sneyder.biznearby.ui.explore
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Suppress("unused")
 @Module
-abstract class HomeProvider {
+abstract class ExploreProvider {
 
     @ContributesAndroidInjector
-    abstract fun provideHomeFragment(): HomeFragment
+    abstract fun provideHomeFragment(): ExploreFragment
 
 }
