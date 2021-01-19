@@ -10,6 +10,8 @@ import com.sneyder.biznearby.utils.debug
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.sneyder.biznearby.data.model.Result
+import com.sneyder.biznearby.data.model.auth.LogOutResponse
 
 class HomeViewModel
 @Inject constructor(
@@ -17,16 +19,18 @@ class HomeViewModel
     coroutineContextProvider: CoroutineContextProvider
 ) : BaseViewModel(coroutineContextProvider) {
 
-    val userProfile by lazy { MutableLiveData<UserProfile?>() }
+    val userProfile by lazy { MutableLiveData<Result<UserProfile?>?>() }
+    val logOutResponse by lazy { MutableLiveData<Result<LogOutResponse>>() }
 
     fun loadCurrentUserProfile() {
         val currentUserProfile = userRepository.getCurrentUserProfile()
-        userProfile.value = currentUserProfile
+        userProfile.value = Result(success = currentUserProfile)
         debug("currentUserProfile=$currentUserProfile")
         currentUserProfile?.let {
             viewModelScope.launch {
                 val result = withContext(IO) { userRepository.fetchUserProfile(it.id) }
                 if (result.error?.message == "HTTP 401 Unauthorized") logOut()
+                userProfile.value = result
                 debug("loadCurrentUserProfile result=$result")
             }
         }
@@ -36,7 +40,7 @@ class HomeViewModel
         debug("logOut")
         viewModelScope.launch {
             val result = withContext(IO) { userRepository.logOut() }
-            debug("userProfile.value = null")
+            logOutResponse.value = result
             userProfile.value = null
         }
     }

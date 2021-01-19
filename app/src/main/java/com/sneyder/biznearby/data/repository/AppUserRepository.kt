@@ -1,6 +1,5 @@
 package com.sneyder.biznearby.data.repository
 
-import android.webkit.MimeTypeMap
 import com.google.gson.GsonBuilder
 import com.sneyder.biznearby.data.api.BizNearbyApi
 import com.sneyder.biznearby.data.api.genRequestBody
@@ -50,9 +49,11 @@ class AppUserRepository
 
     override suspend fun fetchUserProfile(userId: String): Result<UserProfile> {
         return mapToResult({
-            bizNearbyApi.getUserProfile(
+            val userProfile = bizNearbyApi.getUserProfile(
                 userId = userId
             )
+            saveUserToPrefs(userProfile)
+            userProfile
         })
     }
 
@@ -81,15 +82,17 @@ class AppUserRepository
         response.headers().get(ACCESS_TOKEN)?.let {
             prefs[ACCESS_TOKEN] = it
         }
-        response.body()?.let {
-            val toJson = GsonBuilder().serializeNulls().create().toJson(it)
-            debug("user saved to prefs=$toJson")
-            prefs[USER] = toJson
-        }
+        response.body()?.let { saveUserToPrefs(it) }
 
         return mapToResult({
             response.body()
         })
+    }
+
+    private fun saveUserToPrefs(it: UserProfile) {
+        val toJson = GsonBuilder().serializeNulls().create().toJson(it)
+        debug("user saved to prefs=$toJson")
+        prefs[USER] = toJson
     }
 
     override suspend fun logIn(request: LogInRequest): Result<UserProfile> {
@@ -97,11 +100,7 @@ class AppUserRepository
          response.headers().get(ACCESS_TOKEN)?.let {
             prefs[ACCESS_TOKEN] = it
         }
-        response.body()?.let {
-            val toJson = GsonBuilder().serializeNulls().create().toJson(it)
-            debug("user saved to prefs=$toJson")
-            prefs[USER] = toJson
-        }
+        response.body()?.let { saveUserToPrefs(it) }
 
         return mapToResult({
             response.body()

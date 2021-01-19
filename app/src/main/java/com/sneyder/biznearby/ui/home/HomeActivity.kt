@@ -26,6 +26,7 @@ import com.sneyder.biznearby.utils.base.DaggerActivity
 import com.sneyder.biznearby.utils.debug
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import java.util.*
 
 class HomeActivity : DaggerActivity() {
 
@@ -34,12 +35,14 @@ class HomeActivity : DaggerActivity() {
     private val logInButton by lazy { headerView.findViewById<Button>(R.id.logInButton) }
     private val profileImageView by lazy { headerView.findViewById<ImageView>(R.id.profileImageView) }
     private val fullnameTextView by lazy { headerView.findViewById<TextView>(R.id.fullnameTextView) }
+    private val typeUserTextView by lazy { headerView.findViewById<TextView>(R.id.typeUserTextView) }
     private val emailTextView by lazy { headerView.findViewById<TextView>(R.id.emailTextView) }
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
     companion object {
 
         fun navMenuItemsVisibleByUser(user: UserProfile?): List<Int> {
+            debug("navMenuItemsVisibleByUser $user")
             if (user == null) return listOf(R.id.nav_explore)
             return when (user.getTypeUser()) {
                 TypeUser.ADMIN -> {
@@ -83,7 +86,14 @@ class HomeActivity : DaggerActivity() {
         logInButton.setOnClickListener { startActivity(LogInActivity.starterIntent(this)) }
 
         observeUserProfile()
+        observeLogOutResponse()
         viewModel.loadCurrentUserProfile()
+    }
+
+    private fun observeLogOutResponse() {
+        viewModel.logOutResponse.observe(this) {
+
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -93,24 +103,38 @@ class HomeActivity : DaggerActivity() {
     }
 
     private fun observeUserProfile() {
-        viewModel.userProfile.observe(this) { userProfile ->
+        viewModel.userProfile.observe(this) {
+            val userProfile = it?.success
             debug("observeUserProfile $userProfile")
-            if (userProfile != null) {
-                logInButton.visibility = View.GONE
-                profileImageView.visibility = View.VISIBLE
-                fullnameTextView.visibility = View.VISIBLE
-                emailTextView.visibility = View.VISIBLE
-                fullnameTextView.text = userProfile.fullname
-                emailTextView.text = userProfile.email
-                Glide.with(this).load(userProfile.thumbnailUrl).centerCrop().into(profileImageView)
-            } else {
-                logInButton.visibility = View.VISIBLE
-                profileImageView.visibility = View.GONE
-                fullnameTextView.visibility = View.GONE
-                emailTextView.visibility = View.GONE
+            when {
+                it == null || userProfile == null -> {
+                    logInButton.visibility = View.VISIBLE
+                    profileImageView.visibility = View.GONE
+                    fullnameTextView.visibility = View.GONE
+                    emailTextView.visibility = View.GONE
+                    typeUserTextView.visibility = View.GONE
+                    invalidateOptionsMenu()
+                    setUpNavView(navMenuItemsVisibleByUser(userProfile))
+                }
+                it.isLoading -> {
+
+                }
+                else -> {
+                    logInButton.visibility = View.GONE
+                    profileImageView.visibility = View.VISIBLE
+                    fullnameTextView.visibility = View.VISIBLE
+                    emailTextView.visibility = View.VISIBLE
+                    typeUserTextView.visibility =
+                        if (TypeUser.valueOf(userProfile.typeUser.toUpperCase(Locale.ROOT)) != TypeUser.NORMAL) View.VISIBLE else View.GONE
+                    fullnameTextView.text = userProfile.fullname
+                    emailTextView.text = userProfile.email
+                    typeUserTextView.text = userProfile.typeUser
+                    Glide.with(this).load(userProfile.thumbnailUrl).centerCrop()
+                        .into(profileImageView)
+                    invalidateOptionsMenu()
+                    setUpNavView(navMenuItemsVisibleByUser(userProfile))
+                }
             }
-            invalidateOptionsMenu()
-            setUpNavView(navMenuItemsVisibleByUser(userProfile))
         }
     }
 
