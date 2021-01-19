@@ -3,35 +3,34 @@ package com.sneyder.biznearby.ui.explore
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
+import kotlinx.android.synthetic.main.fragment_explore.*
 
 class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
 
     private val exploreViewModel: ExploreViewModel by viewModels { viewModelFactory }
-    private lateinit var mMap: GoogleMap
-    private lateinit var mapView: MapView
+    private lateinit var googleMap: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_explore, container, false)
+        return inflater.inflate(R.layout.fragment_explore, container, false)
+    }
 
-        mapView = view.findViewById(R.id.mapView)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
-        return view
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mapView?.onCreate(savedInstanceState)
+        mapView?.getMapAsync(this)
     }
 
 
@@ -44,9 +43,8 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    override fun onMapReady(googleMap: GoogleMap) {
-        Log.d("MapReady", "onMapReady: siuuuuuuuu2")
-        mMap = googleMap
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -65,7 +63,7 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        mMap.isMyLocationEnabled = true
+        googleMap.isMyLocationEnabled = true
 
         // Add a marker in Sydney and move the camera
 //        val sydney = LatLng(-34.0, 151.0)
@@ -79,31 +77,31 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        mapView?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        mapView?.onPause()
     }
 
     override fun onStart() {
         super.onStart()
-        mapView.onStart()
+        mapView?.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        mapView.onStop()
+        mapView?.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mapView.onDestroy()
+        mapView?.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        mapView?.onLowMemory()
     }
 }

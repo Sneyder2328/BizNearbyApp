@@ -21,32 +21,45 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sneyder.biznearby.R
 
 
-class SelectImageDialog: BottomSheetDialogFragment() {
+class SelectImageDialog : BottomSheetDialogFragment() {
 
     companion object {
 
-        fun newInstance(): SelectImageDialog {
-            return SelectImageDialog()
+        private const val EXTRA_INCLUDE_REMOVE = "includeRemove"
+
+        fun newInstance(includeRemove: Boolean = false): SelectImageDialog {
+            val selectImageDialog = SelectImageDialog()
+            selectImageDialog.arguments = bundleOf(EXTRA_INCLUDE_REMOVE to includeRemove)
+            return selectImageDialog
         }
 
     }
 
     private var selectImageListener: SelectImageListener? = null
+    private val includeRemove by lazy {
+        arguments?.getBoolean(EXTRA_INCLUDE_REMOVE, false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.bottom_sheet_pick_image, container, false)
-        view.findViewById<View>(R.id.removeButton).setOnClickListener {
-            selectImageListener?.onRemoveImage()
-            dismissAllowingStateLoss()
+        val view = inflater.inflate(R.layout.bottom_sheet_pick_image, container, false)
+        if (includeRemove == true) {
+            val removeButton = view.findViewById<View>(R.id.removeButton)
+            removeButton.visibility = View.VISIBLE
+            removeButton.setOnClickListener {
+                selectImageListener?.onRemoveImage()
+                dismissAllowingStateLoss()
+            }
         }
+
         view.findViewById<View>(R.id.galleryButton).setOnClickListener {
             selectImageListener?.onPickImage()
             dismissAllowingStateLoss()
@@ -60,10 +73,16 @@ class SelectImageDialog: BottomSheetDialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is SelectImageListener) {
-            selectImageListener = context
-        } else {
-            throw RuntimeException("$context must implement SelectImageListener")
+        selectImageListener = when {
+            context is SelectImageListener -> {
+                context
+            }
+            parentFragment is SelectImageListener -> {
+                parentFragment as SelectImageListener
+            }
+            else -> {
+                throw RuntimeException("$context must implement SelectImageListener")
+            }
         }
     }
 

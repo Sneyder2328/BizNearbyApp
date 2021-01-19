@@ -17,6 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.TypeUser
 import com.sneyder.biznearby.data.model.user.UserProfile
@@ -69,9 +70,7 @@ class HomeActivity : DaggerActivity() {
         }
 
         fun starterIntent(context: Context): Intent {
-            val starter = Intent(context, HomeActivity::class.java)
-            //starter.putExtra(EXTRA_, )
-            return starter
+            return Intent(context, HomeActivity::class.java)
         }
 
     }
@@ -103,6 +102,7 @@ class HomeActivity : DaggerActivity() {
                 emailTextView.visibility = View.VISIBLE
                 fullnameTextView.text = userProfile.fullname
                 emailTextView.text = userProfile.email
+                Glide.with(this).load(userProfile.thumbnailUrl).centerCrop().into(profileImageView)
             } else {
                 logInButton.visibility = View.VISIBLE
                 profileImageView.visibility = View.GONE

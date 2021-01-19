@@ -27,7 +27,7 @@ import com.sneyder.biznearby.utils.debug
 
 class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListener {
 
-    private lateinit var googleMap: GoogleMap
+    private var googleMap: GoogleMap? = null
 
     companion object {
 
@@ -81,39 +81,41 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-        googleMap.uiSettings.isMyLocationButtonEnabled = true
+        googleMap?.uiSettings?.isMyLocationButtonEnabled = true
         ifHasPermission(
             permissionsToAskFor = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), 101, {
                 debug("PickLocationAativity onMapReady permission for location  = true")
-                googleMap.isMyLocationEnabled = true
+                googleMap?.isMyLocationEnabled = true
                 val latitude = intent.getDoubleExtra(EXTRA_LATITUDE, UNREACHABLE_GRADE)
                     .let { if (it != UNREACHABLE_GRADE) it else null }
                 val longitude = intent.getDoubleExtra(EXTRA_LONGITUDE, UNREACHABLE_GRADE)
                     .let { if (it != UNREACHABLE_GRADE) it else null }
                 if (latitude != null && longitude != null) {
-                    moveMapCamera(LatLng(latitude, longitude))
+                    val location = LatLng(latitude, longitude)
+                    addMarkerAtPosition(location)
+                    moveMapCamera(location)
                 } else {
                     displayUserLocation()
                 }
             })
-        googleMap.setOnMapClickListener { loc ->
+        googleMap?.setOnMapClickListener { loc ->
             debug("clicked map at $loc")
             if (loc == null) return@setOnMapClickListener
             addMarkerAtPosition(loc)
             Handler(Looper.getMainLooper()).postDelayed({
                 showConfirmLocationDialog(loc)
-            }, 1000)
+            }, 200)
         }
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     private fun addMarkerAtPosition(loc: LatLng) {
+        debug("addMarkerAtPosition $loc")
         val title = intent?.getStringExtra(EXTRA_BUSINESS_NAME)
             .let { if (it != null) "Ubicación de $it" else "Ubicación" }
-        googleMap.addMarker(
+        googleMap?.addMarker(
             MarkerOptions()
                 .position(loc)
                 .title(title)
@@ -144,7 +146,7 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
             .setIcon(android.R.drawable.ic_dialog_map)
             .setCancelable(false)
             .setPositiveButton(android.R.string.yes) { _, _ ->
-                googleMap.clear()
+                googleMap?.clear()
                 val data = Intent()
                 data.putExtra(EXTRA_LATITUDE, loc.latitude)
                 data.putExtra(EXTRA_LONGITUDE, loc.longitude)
@@ -152,7 +154,7 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
                 finish()
             }
             .setNegativeButton(android.R.string.no) { _, _ ->
-                googleMap.clear()
+                googleMap?.clear()
             }.show()
     }
 
@@ -161,7 +163,7 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
             .target(location) // Sets the center of the map to the user's location
             .zoom(17f)            // Sets the zoom
             .build()              // Creates a CameraPosition from the builder
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
     @SuppressLint("MissingPermission")

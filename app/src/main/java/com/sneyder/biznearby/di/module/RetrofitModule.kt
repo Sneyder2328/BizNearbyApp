@@ -6,6 +6,9 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sneyder.biznearby.data.api.BizNearbyApi
+import com.sneyder.biznearby.data.preferences.AppPreferencesHelper
+import com.sneyder.biznearby.data.preferences.PreferencesHelper
+import com.sneyder.biznearby.utils.debug
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -19,13 +22,21 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(prefs: PreferencesHelper): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .addNetworkInterceptor(StethoInterceptor())
-            .retryOnConnectionFailure(true)
+            .addInterceptor { chain->
+                val accessToken: String? = prefs[AppPreferencesHelper.ACCESS_TOKEN]
+                debug("accessToken in interceptor $accessToken")
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization","Bearer $accessToken")
+                    .build()
+                chain.proceed(newRequest)
+            }
+            .retryOnConnectionFailure(false)
             .build()
     }
 

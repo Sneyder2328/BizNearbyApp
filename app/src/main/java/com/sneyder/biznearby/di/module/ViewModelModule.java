@@ -23,9 +23,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sneyder.biznearby.ViewModelProviderFactory;
 import com.sneyder.biznearby.di.ViewModelKey;
 import com.sneyder.biznearby.ui.add_business.AddBusinessViewModel;
+import com.sneyder.biznearby.ui.add_business_image.AddBizImageViewModel;
 import com.sneyder.biznearby.ui.explore.ExploreViewModel;
 import com.sneyder.biznearby.ui.home.HomeViewModel;
 import com.sneyder.biznearby.ui.login.LogInViewModel;
+import com.sneyder.biznearby.ui.pick_city.PickCityViewModel;
 import com.sneyder.biznearby.ui.signup.SignUpViewModel;
 
 import dagger.Binds;
@@ -70,6 +72,16 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(AddBusinessViewModel.class)
   abstract ViewModel bindAddBusinessViewModel(AddBusinessViewModel AddBusinessViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(PickCityViewModel.class)
+  abstract ViewModel bindPickCityViewModel(PickCityViewModel PickCityViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(AddBizImageViewModel.class)
+  abstract ViewModel bindAddBizImageViewModel(AddBizImageViewModel AddBizImageViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

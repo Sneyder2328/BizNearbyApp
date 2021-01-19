@@ -13,6 +13,7 @@ import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.ACC
 import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.USER
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.debug
+import com.sneyder.biznearby.utils.getMimeType
 import com.sneyder.biznearby.utils.mapToResult
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -42,35 +43,20 @@ class AppUserRepository
         }
     }
 
-    private fun getAccessToken(): String {
-        val token: String = prefs[ACCESS_TOKEN] ?: ""
-        return "Bearer $token"
-    }
+//    private fun getAccessToken(): String {
+//        val token: String = prefs[ACCESS_TOKEN] ?: ""
+//        return "Bearer $token"
+//    }
 
     override suspend fun fetchUserProfile(userId: String): Result<UserProfile> {
         return mapToResult({
             bizNearbyApi.getUserProfile(
-                authorization = getAccessToken(),
                 userId = userId
             )
         })
     }
 
 
-    /**
-     * More info at: https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android/39923767#39923767
-     */
-    private fun getMimeType(url: String?): String {
-        var type: String? = null
-        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase(Locale.ROOT))
-        }
-        if (type == null) {
-            type = "image/*" // fallback type. You might set it to */*
-        }
-        return type
-    }
 
     override suspend fun signUp(request: SignUpRequest): Result<UserProfile> {
         val imageProfile: MultipartBody.Part? = request.imageProfilePath?.let {
@@ -84,7 +70,9 @@ class AppUserRepository
         val response = bizNearbyApi.signUp(
             id = genRequestBody(request.id),
             email = genRequestBody(request.email),
-            password = genRequestBody(request.password ?: ""),
+            password = request.password?.let { genRequestBody(it) },
+            googleToken = request.googleAuth?.token?.let { genRequestBody(it) },
+            googleUserId = request.googleAuth?.userId?.let { genRequestBody(it) },
             typeLogin = genRequestBody(request.typeLogin),
             fullname = genRequestBody(request.fullname),
             thumbnailUrl = genRequestBody(request.thumbnailUrl ?: ""),
@@ -122,7 +110,7 @@ class AppUserRepository
 
     override suspend fun logOut(): Result<LogOutResponse> {
         return mapToResult({
-            bizNearbyApi.logOut(authorization = getAccessToken())
+            bizNearbyApi.logOut()
         }, onFinally = {
             prefs[USER] = ""
             prefs[ACCESS_TOKEN] = ""

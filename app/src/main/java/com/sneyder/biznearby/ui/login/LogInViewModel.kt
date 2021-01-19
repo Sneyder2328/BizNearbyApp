@@ -3,6 +3,7 @@ package com.sneyder.biznearby.ui.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sneyder.biznearby.data.model.Result
+import com.sneyder.biznearby.data.model.auth.GoogleAuth
 import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.TypeLogin
 import com.sneyder.biznearby.data.model.user.UserProfile
@@ -24,17 +25,20 @@ class LogInViewModel
 
     fun logIn(
         email: String,
-        password: String,
-        typeLogin: TypeLogin
+        password: String? = null,
+        typeLogin: TypeLogin,
+        googleAuth: GoogleAuth? = null
     ) {
         debug("logIn $email $password $typeLogin")
+        userLoggedIn.value = Result()
         viewModelScope.launch {
             val result = withContext(IO) {
                 userRepository.logIn(
                     LogInRequest(
                         email = email,
                         password = password,
-                        typeLogin = typeLogin.type
+                        typeLogin = typeLogin.type,
+                        googleAuth = googleAuth
                     )
                 )
             }

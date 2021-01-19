@@ -3,6 +3,7 @@ package com.sneyder.biznearby.ui.signup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sneyder.biznearby.data.model.Result
+import com.sneyder.biznearby.data.model.auth.GoogleAuth
 import com.sneyder.biznearby.data.model.auth.SignUpRequest
 import com.sneyder.biznearby.data.model.auth.TypeLogin
 import com.sneyder.biznearby.data.model.user.UserProfile
@@ -25,22 +26,27 @@ class SignUpViewModel
 
     fun signUp(
         email: String,
-        password: String?,
+        password: String? = null,
         fullname: String,
         typeLogin: TypeLogin,
         imageProfilePath: String? = null,
-        phoneNumber: String
+        thumbnailUrl: String? = null,
+        phoneNumber: String? = null,
+        googleAuth: GoogleAuth? = null
     ) {
         debug("signUp")
+        userCreated.value = Result()
         viewModelScope.launch {
             val result = withContext(IO) {
                 userRepository.signUp(
                     SignUpRequest(
                         id = UUID.randomUUID().toString(),
                         email = email,
+                        googleAuth = googleAuth,
                         password = password,
                         fullname = fullname,
                         typeLogin = typeLogin.type,
+                        thumbnailUrl = thumbnailUrl,
                         imageProfilePath = imageProfilePath,
                         phoneNumber = phoneNumber
                     )

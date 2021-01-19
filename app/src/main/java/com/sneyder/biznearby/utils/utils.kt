@@ -5,6 +5,7 @@ package com.sneyder.biznearby.utils
 import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
+import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -14,6 +15,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.webkit.MimeTypeMap
 import android.widget.EditText
 import android.widget.TextView
 import com.google.android.gms.common.ConnectionResult
@@ -22,7 +24,28 @@ import com.google.android.material.snackbar.Snackbar
 import java.io.UnsupportedEncodingException
 import com.sneyder.biznearby.data.model.Result
 import java.lang.NullPointerException
+import java.util.*
 
+val Int.dp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+/**
+ * More info at: https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android/39923767#39923767
+ */
+fun getMimeType(url: String?): String {
+    var type: String? = null
+    val extension = MimeTypeMap.getFileExtensionFromUrl(url)
+    if (extension != null) {
+        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase(Locale.ROOT))
+    }
+    if (type == null) {
+        type = "image/*" // fallback type. You might set it to */*
+    }
+    return type
+}
 
 fun View.displayLongTextSnackBar(message: String) {
     val snackbar: Snackbar = Snackbar.make(

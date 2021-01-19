@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginRight="4dp"
+    app:chipBackgroundColor="@color/lightBlue"
+    app:closeIcon="@drawable/ic_baseline_close_24"
+    app:closeIconTint="#5E5E5E"
+    android:textColor="#5E5E5E"
+    app:closeIconEnabled="true"
+    tools:text="Panaderia"
+    tools:ignore="RtlHardcoded" />

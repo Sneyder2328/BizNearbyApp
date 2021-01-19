@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,6 +52,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
+        <FrameLayout
+            android:id="@+id/mapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/addressTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:cameraZoom="15"/>
+
+            <TextView
+                android:id="@+id/pickLocationTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:background="#5C010B1B"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="Seleccionar ubicación exacta:"/>
+
+        </FrameLayout>
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cityEditText"
@@ -58,11 +87,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            android:hint="Descripcion de la direccion"
+            android:hint="Ciudad, Estado, País"
             android:maxHeight="80dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addressTextView" />
+            app:layout_constraintTop_toBottomOf="@id/mapContainer" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addressEditText"
@@ -103,6 +132,7 @@
                     android:id="@+id/addCategoryChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/lightBlue"
                     app:chipIcon="@drawable/ic_baseline_add_24" />
 
             </LinearLayout>
@@ -123,6 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="L"
             app:layout_constraintEnd_toStartOf="@id/tuesdayChip"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -134,6 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="M"
             app:layout_constraintEnd_toStartOf="@id/wednesdayChip"
             app:layout_constraintStart_toEndOf="@id/mondayChip"
@@ -144,6 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="M"
             app:layout_constraintEnd_toStartOf="@id/thursDayChip"
             app:layout_constraintStart_toEndOf="@id/tuesdayChip"
@@ -154,6 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="J"
             app:layout_constraintEnd_toStartOf="@id/fridayChip"
             app:layout_constraintStart_toEndOf="@id/wednesdayChip"
@@ -164,6 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="V"
             app:layout_constraintEnd_toStartOf="@id/saturdayChip"
             app:layout_constraintStart_toEndOf="@id/thursDayChip"
@@ -174,6 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="S"
             app:layout_constraintEnd_toStartOf="@id/sundayChip"
             app:layout_constraintStart_toEndOf="@id/fridayChip"
@@ -184,6 +220,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
             android:text="D"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/saturdayChip"
@@ -207,6 +244,15 @@
             app:layout_constraintStart_toEndOf="@id/open24HrsCheckBox"
             app:layout_constraintTop_toBottomOf="@id/mondayChip" />
 
+        <LinearLayout
+            android:id="@+id/hoursLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/open24HrsCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addHoursButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -215,7 +261,7 @@
             android:text="Agregar horas"
             android:textAllCaps="false"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/open24HrsCheckBox" />
+            app:layout_constraintTop_toBottomOf="@id/hoursLayout" />
 
         <TextView
             android:id="@+id/imagesTextView"
@@ -236,6 +282,16 @@
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:span="3"
             tools:itemCount="3"/>
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/imagesList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Guardar"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

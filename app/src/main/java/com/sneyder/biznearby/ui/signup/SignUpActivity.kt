@@ -2,6 +2,7 @@ package com.sneyder.biznearby.ui.signup
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
@@ -24,6 +24,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.sneyder.biznearby.R
+import com.sneyder.biznearby.data.model.auth.GoogleAuth
 import com.sneyder.biznearby.data.model.auth.TypeLogin
 import com.sneyder.biznearby.ui.home.HomeActivity
 import com.sneyder.biznearby.utils.*
@@ -69,9 +70,7 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
         const val REQUEST_TAKE_PHOTO = 101
 
         fun starterIntent(context: Context): Intent {
-            val starter = Intent(context, SignUpActivity::class.java)
-            //starter.putExtra(EXTRA_, )
-            return starter
+            return Intent(context, SignUpActivity::class.java)
         }
 
     }
@@ -110,23 +109,27 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
         observeUserCreated()
     }
 
+    private var progressDialog: ProgressDialog? = null
+
     private fun observeUserCreated() {
         viewModel.userCreated.observe(this) {
             debug("observeUserCreated $it")
             when {
                 it.isLoading -> {
-                    linealProgressIndicator.visibility = View.VISIBLE
-                    creatingAccountTextView.visibility = View.VISIBLE
+                    progressDialog = ProgressDialog(this)
+                    progressDialog?.setCancelable(false)
+                    progressDialog?.setMessage("Creando cuenta...")
+                    progressDialog?.show()
                 }
                 it.success != null -> {
+                    if (progressDialog?.isShowing == true) progressDialog?.dismiss()
                     startActivity(HomeActivity.starterIntent(this))
                     finish()
                 }
                 it.error != null -> {
+                    if (progressDialog?.isShowing == true) progressDialog?.dismiss()
                     it.error.printStackTrace()
                     signUpLayout.displayLongTextSnackBar(it.error.message ?: return@observe)
-                    linealProgressIndicator.visibility = View.INVISIBLE
-                    creatingAccountTextView.visibility = View.INVISIBLE
                 }
             }
         }
@@ -164,7 +167,6 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
             passwordRepeatEditText.error = "Las contraseñas no coinciden"
             return
         }
-
         viewModel.signUp(
             fullname = fullname,
             email = email,
@@ -172,6 +174,22 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
             typeLogin = TypeLogin.EMAIL,
             imageProfilePath = imageProfilePath,
             phoneNumber = "+${phoneCodeTextView.text}$phoneNumber"
+        )
+    }
+
+    private fun signUpWithGoogle(
+        id: String,
+        idToken: String,
+        fullname: String,
+        email: String,
+        thumbnailUrl: String?
+    ) {
+        viewModel.signUp(
+            fullname = fullname,
+            email = email,
+            typeLogin = TypeLogin.GOOGLE,
+            thumbnailUrl = thumbnailUrl,
+            googleAuth = GoogleAuth(userId = id, token = idToken)
         )
     }
 
@@ -231,7 +249,6 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
                         "com.sneyder.biznearby.android.fileprovider",
                         photoFile
                     )
-//                    imageProfilePath = photoFile.path
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
                 }
@@ -323,9 +340,21 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
     private fun handleGoogleSignInResult(result: Task<GoogleSignInAccount>?) {
         try {
             val account: GoogleSignInAccount? = result?.getResult(ApiException::class.java)
+            if (account == null) {
+                Toast.makeText(this, "Hubo un error en el registro con Google", Toast.LENGTH_LONG)
+                    .show()
+                return
+            }
             Log.d(
                 "SignUpActivity",
                 "handleGoogleSignInResult2 idToken = ${account?.idToken} userId = ${account?.id} ${account?.email} ${account?.serverAuthCode} ${account?.displayName} ${account?.photoUrl}"
+            )
+            signUpWithGoogle(
+                id = account.id ?: return,
+                idToken = account.idToken ?: return,
+                email = account.email ?: return,
+                fullname = account.displayName ?: "",
+                thumbnailUrl = account.photoUrl?.toString() ?: ""
             )
             googleSignInClient.signOut() // Signed in successfully, logOut and open RegisterActivity.
 //            startActivity(RegisterActivity.starterIntent(this@SignUpActivity, TypeLogin.GOOGLE.data, email = account.email,
@@ -358,7 +387,6 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
                 val path = ImageSelectorUtils.getFilePathFromUri(this, selectedImage)
                 debug("REQUEST_PICK_PHOTO: $path")
                 imageProfilePath = path
-//                File(path) // get file pointing to it
             }
             REQUEST_TAKE_PHOTO -> {// a existing image has been selected
                 if (resultCode != Activity.RESULT_OK) return

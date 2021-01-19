@@ -40,6 +40,7 @@
         android:id="@+id/removeImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="@id/closeTime"
         app:layout_constraintStart_toEndOf="@id/closeTime"

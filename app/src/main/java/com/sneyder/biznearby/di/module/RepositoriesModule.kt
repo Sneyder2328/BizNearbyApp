@@ -16,10 +16,10 @@
 
 package com.sneyder.biznearby.di.module
 
-import com.sneyder.biznearby.data.repository.AppUserRepository
-import com.sneyder.biznearby.data.repository.UserRepository
+import com.sneyder.biznearby.data.repository.*
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Suppress("unused")
@@ -30,5 +30,12 @@ abstract class RepositoriesModule {
     @Singleton
     abstract fun provideUserRepository(appUserRepository: AppUserRepository): UserRepository
 
+    @Binds
+    @Singleton
+    abstract fun provideLocationsRepositoryRepository(appLocationsRepositoryRepository: AppLocationsRepository): LocationsRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideBusinessRepository(appBusinessRepository: AppBusinessRepository): BusinessRepository
 
 }

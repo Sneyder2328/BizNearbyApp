@@ -2,6 +2,9 @@ package com.sneyder.biznearby.data.api
 
 import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.LogOutResponse
+import com.sneyder.biznearby.data.model.business.Business
+import com.sneyder.biznearby.data.model.business.Category
+import com.sneyder.biznearby.data.model.model.CityLocation
 import com.sneyder.biznearby.data.model.user.UserProfile
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -18,15 +21,36 @@ interface BizNearbyApi {
         const val SIGN_UP = "users"
         const val LOG_IN = "sessions"
         const val LOG_OUT = "sessions"
-        const val GET_USER_PROFILE = "users/{userId}/"
+        const val GET_USER_PROFILE = "users/{userId}"
+
+        const val SEARCH_LOCATION = "locations"
+
+        const val ADD_BUSINESS = "businesses"
+        const val GET_BUSINESS_CATEGORIES = "categories"
+        const val BUSINESS_IMAGE = "businesses/images"
 
     }
 
+    @POST(ADD_BUSINESS)
+    suspend fun addBusiness(
+        @Body business: Business
+    ): Business
+
+    @GET(SEARCH_LOCATION)
+    suspend fun searchCityLocations(
+        @Query("query") query: String,
+        @Query("limit") limit: Int,
+    ): ArrayList<CityLocation>
+
+    @GET(GET_BUSINESS_CATEGORIES)
+    suspend fun fetchBusinessCategories(): ArrayList<Category>
+
     @GET(GET_USER_PROFILE)
     suspend fun getUserProfile(
-        @Header("Authorization") authorization: String?,
         @Path("userId") userId: String
     ): UserProfile
+
+
 //
 //    @GET(NO_APTOS)
 //    suspend fun getNoAptos(
@@ -42,12 +66,20 @@ interface BizNearbyApi {
 //    ): FirebaseTokenId
 
     @Multipart
+    @POST(BUSINESS_IMAGE)
+    suspend fun uploadBusinessImage(
+        @Part businessImage: MultipartBody.Part
+    ): String
+
+    @Multipart
     @POST(SIGN_UP)
     suspend fun signUp(
         @Part("id") id: RequestBody,
         @Part("email") email: RequestBody,
         @Part("fullname") fullname: RequestBody,
-        @Part("password") password: RequestBody,
+        @Part("password") password: RequestBody? = null,
+        @Part("googleAuth.token") googleToken: RequestBody? = null,
+        @Part("googleAuth.userId") googleUserId: RequestBody? = null,
         @Part("typeLogin") typeLogin: RequestBody,
         @Part("thumbnailUrl") thumbnailUrl: RequestBody,
         @Part imageProfile: MultipartBody.Part? = null,
@@ -59,9 +91,7 @@ interface BizNearbyApi {
     ): Response<UserProfile>
 
     @DELETE(LOG_OUT)
-    suspend fun logOut(
-        @Header("Authorization") authorization: String?
-    ): LogOutResponse
+    suspend fun logOut(): LogOutResponse
 
 
 }
