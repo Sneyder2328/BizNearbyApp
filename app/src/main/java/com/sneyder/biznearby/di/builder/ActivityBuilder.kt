@@ -21,6 +21,7 @@ import com.sneyder.biznearby.ui.add_business_image.AddBizImageActivity
 import com.sneyder.biznearby.ui.home.HomeActivity
 import com.sneyder.biznearby.ui.explore.ExploreProvider
 import com.sneyder.biznearby.ui.login.LogInActivity
+import com.sneyder.biznearby.ui.moderators.ModeratorsProvider
 import com.sneyder.biznearby.ui.pick_city.PickCityActivity
 import com.sneyder.biznearby.ui.pick_location.PickLocationActivity
 import com.sneyder.biznearby.ui.signup.SignUpActivity
@@ -31,7 +32,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBuilder {
 
-    @ContributesAndroidInjector(modules = [ExploreProvider::class, AddBusinessProvider::class])
+    @ContributesAndroidInjector(modules = [ExploreProvider::class, AddBusinessProvider::class, ModeratorsProvider::class])
     abstract fun bindHomeActivity(): HomeActivity
 //
 //    @ContributesAndroidInjector()

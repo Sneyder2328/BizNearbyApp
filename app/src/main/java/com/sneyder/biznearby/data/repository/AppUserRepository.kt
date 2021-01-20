@@ -2,7 +2,6 @@ package com.sneyder.biznearby.data.repository
 
 import com.google.gson.GsonBuilder
 import com.sneyder.biznearby.data.api.BizNearbyApi
-import com.sneyder.biznearby.data.api.genRequestBody
 import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.LogOutResponse
@@ -12,6 +11,7 @@ import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.ACC
 import com.sneyder.biznearby.data.preferences.AppPreferencesHelper.Companion.USER
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.debug
+import com.sneyder.biznearby.utils.genRequestBody
 import com.sneyder.biznearby.utils.getMimeType
 import com.sneyder.biznearby.utils.mapToResult
 import okhttp3.MediaType
@@ -30,6 +30,12 @@ class AppUserRepository
     private val prefs: PreferencesHelper,
 //    private val appDatabase: AppDatabase
 ) : UserRepository() {
+
+    override suspend fun fetchModerators(): Result<List<UserProfile>> {
+        return mapToResult({
+            bizNearbyApi.getModerators()
+        })
+    }
 
     override fun getCurrentUserProfile(): UserProfile? {
         val json: String = prefs[USER] ?: return null

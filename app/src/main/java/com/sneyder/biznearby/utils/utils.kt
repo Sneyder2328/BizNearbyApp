@@ -23,6 +23,8 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import java.io.UnsupportedEncodingException
 import com.sneyder.biznearby.data.model.Result
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.lang.NullPointerException
 import java.util.*
 
@@ -31,6 +33,8 @@ val Int.dp: Int
 
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+fun genRequestBody(content: String): RequestBody = RequestBody.create(MultipartBody.FORM, content)
 
 /**
  * More info at: https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android/39923767#39923767

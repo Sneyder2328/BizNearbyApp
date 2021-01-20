@@ -27,6 +27,7 @@ import com.sneyder.biznearby.ui.add_business_image.AddBizImageViewModel;
 import com.sneyder.biznearby.ui.explore.ExploreViewModel;
 import com.sneyder.biznearby.ui.home.HomeViewModel;
 import com.sneyder.biznearby.ui.login.LogInViewModel;
+import com.sneyder.biznearby.ui.moderators.ModeratorsViewModel;
 import com.sneyder.biznearby.ui.pick_city.PickCityViewModel;
 import com.sneyder.biznearby.ui.signup.SignUpViewModel;
 
@@ -82,6 +83,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(AddBizImageViewModel.class)
   abstract ViewModel bindAddBizImageViewModel(AddBizImageViewModel AddBizImageViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(ModeratorsViewModel.class)
+  abstract ViewModel bindModeratorsViewModel(ModeratorsViewModel ModeratorsViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

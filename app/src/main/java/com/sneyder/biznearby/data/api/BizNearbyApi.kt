@@ -11,8 +11,6 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
-fun genRequestBody(content: String): RequestBody = RequestBody.create(MultipartBody.FORM, content)
-
 interface BizNearbyApi {
 
     companion object {
@@ -29,7 +27,12 @@ interface BizNearbyApi {
         const val GET_BUSINESS_CATEGORIES = "categories"
         const val BUSINESS_IMAGE = "businesses/images"
 
+        const val GET_MODERATORS = "moderators"
+
     }
+
+    @GET(GET_MODERATORS)
+    suspend fun getModerators(): List<UserProfile>
 
     @POST(ADD_BUSINESS)
     suspend fun addBusiness(

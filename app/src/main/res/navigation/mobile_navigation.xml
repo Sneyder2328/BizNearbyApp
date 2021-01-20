@@ -16,4 +16,10 @@
         android:name="com.sneyder.biznearby.ui.add_business.AddBusinessFragment"
         android:label="Nuevo registro"
         tools:layout="@layout/fragment_add_business" />
+
+    <fragment
+        android:id="@+id/nav_moderators"
+        android:name="com.sneyder.biznearby.ui.moderators.ModeratorsFragment"
+        android:label="Moderadores"
+        tools:layout="@layout/fragment_moderators" />
 </navigation>

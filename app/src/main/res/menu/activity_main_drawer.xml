@@ -28,7 +28,7 @@
             android:title="Reportes" />
         <item
             android:id="@+id/nav_moderators"
-            android:icon="@drawable/ic_explore_24"
+            android:icon="@drawable/ic_baseline_groups_24"
             android:visible="false"
             tools:visible="true"
             android:title="Moderadores" />
