@@ -27,4 +27,13 @@ class ModeratorsViewModel
         }
     }
 
+    val addModeratorResult by lazy { MutableLiveData<Result<Boolean>>() }
+
+    fun addModerator(email: String) {
+        viewModelScope.launch {
+            val result = withContext(IO) { userRepository.addModerator(email) }
+
+        }
+    }
+
 }

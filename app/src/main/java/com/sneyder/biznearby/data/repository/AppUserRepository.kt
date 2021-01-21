@@ -31,6 +31,12 @@ class AppUserRepository
 //    private val appDatabase: AppDatabase
 ) : UserRepository() {
 
+    override suspend fun addModerator(email: String): Result<Boolean> {
+        return mapToResult({
+            bizNearbyApi.addModerator(email)
+        })
+    }
+
     override suspend fun fetchModerators(): Result<List<UserProfile>> {
         return mapToResult({
             bizNearbyApi.getModerators()

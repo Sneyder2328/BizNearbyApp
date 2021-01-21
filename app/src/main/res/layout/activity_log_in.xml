@@ -26,7 +26,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
-            style="@style/CustomForm.Input"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginTop="16dp"
             android:hint="Correo electrónico"
@@ -37,8 +37,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
-            style="@style/CustomForm.Input"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Contraseña"
             android:inputType="textPassword"

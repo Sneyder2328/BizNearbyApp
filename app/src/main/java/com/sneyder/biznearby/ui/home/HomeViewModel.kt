@@ -37,12 +37,10 @@ class HomeViewModel
     }
 
     fun logOut() {
-        debug("logOut")
         viewModelScope.launch {
             val result = withContext(IO) { userRepository.logOut() }
             logOutResponse.value = result
             userProfile.value = null
         }
     }
-
 }

@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.utils.base.DaggerFragment
+import com.sneyder.biznearby.utils.dialogs.EditTextDialog
 import kotlinx.android.synthetic.main.fragment_moderators.*
 
-class ModeratorsFragment : DaggerFragment() {
+class ModeratorsFragment : DaggerFragment(), EditTextDialog.EditTextDialogListener {
 
     companion object {
         fun newInstance() = ModeratorsFragment()
@@ -31,8 +34,32 @@ class ModeratorsFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setUpRecyclerView()
+        moderatorRefreshLayout.setOnRefreshListener { viewModel.fetchModerators() }
+        addModeratorButton.setOnClickListener {
+            showAddModeratorDialog()
+        }
         observeModerators()
+        observeAddModerator()
         viewModel.fetchModerators()
+    }
+
+    private fun observeAddModerator() {
+        viewModel.addModeratorResult.observe(viewLifecycleOwner) {
+            if (it.success != null) {
+                viewModel.fetchModerators()
+            }
+        }
+    }
+
+    private fun showAddModeratorDialog() {
+        val addModeratorDialog =
+            EditTextDialog.newInstance("Agregar moderador", "", "Correo electronico")
+        addModeratorDialog.show(childFragmentManager, addModeratorDialog.tag)
+    }
+
+    override fun onTextEntered(text: String) {
+        val email = text.trim()
+        viewModel.addModerator(email)
     }
 
     private fun setUpRecyclerView() {
@@ -44,8 +71,17 @@ class ModeratorsFragment : DaggerFragment() {
 
     private fun observeModerators() {
         viewModel.moderators.observe(viewLifecycleOwner) {
-            it.success?.let { profiles ->
-                moderatorsAdapter.moderators = profiles
+            when {
+                it.isLoading -> {
+                    moderatorRefreshLayout.isRefreshing = true
+                }
+                it.success != null -> {
+                    moderatorRefreshLayout.isRefreshing = false
+                    moderatorsAdapter.moderators = it.success
+                }
+                else -> {
+                    moderatorRefreshLayout.isRefreshing = false
+                }
             }
         }
     }

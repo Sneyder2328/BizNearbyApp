@@ -28,8 +28,14 @@ interface BizNearbyApi {
         const val BUSINESS_IMAGE = "businesses/images"
 
         const val GET_MODERATORS = "moderators"
+        const val ADD_MODERATORS = "moderators/{email}"
 
     }
+
+    @POST(ADD_MODERATORS)
+    suspend fun addModerator(
+        @Path("email") email: String
+    ): Boolean
 
     @GET(GET_MODERATORS)
     suspend fun getModerators(): List<UserProfile>
