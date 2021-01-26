@@ -33,7 +33,10 @@ class ModeratorsAdapter() : RecyclerView.Adapter<ModeratorsAdapter.ModeratorView
     inner class ModeratorViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(profile: UserProfile) {
-            Glide.with(view).load(profile.thumbnailUrl).centerCrop().into(view.profileImageView)
+            Glide.with(view).load(profile.thumbnailUrl)
+                .centerCrop()
+                .placeholder(R.drawable.person_placeholder)
+                .into(view.profileImageView)
             view.fullnameTextView.text = profile.fullname
         }
 

@@ -2,8 +2,10 @@ package com.sneyder.biznearby.data.api
 
 import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.LogOutResponse
+import com.sneyder.biznearby.data.model.business.BizResult
 import com.sneyder.biznearby.data.model.business.Business
 import com.sneyder.biznearby.data.model.business.Category
+import com.sneyder.biznearby.data.model.business.Report
 import com.sneyder.biznearby.data.model.model.CityLocation
 import com.sneyder.biznearby.data.model.user.UserProfile
 import okhttp3.MultipartBody
@@ -30,7 +32,23 @@ interface BizNearbyApi {
         const val GET_MODERATORS = "moderators"
         const val ADD_MODERATORS = "moderators/{email}"
 
+        const val GET_REPORTS = "reports"
+        const val SEARCH_BUSINESSES = "businesses"
+
     }
+
+    @GET(SEARCH_BUSINESSES)
+    suspend fun searchBusinesses(
+        @Query("query") query: String,
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+        @Query("radius") radius: Int
+    ): ArrayList<BizResult>
+
+    @GET(GET_REPORTS)
+    suspend fun getReports(
+        @Query("type") type: String
+    ): ArrayList<Report>
 
     @POST(ADD_MODERATORS)
     suspend fun addModerator(

@@ -29,6 +29,7 @@ import com.sneyder.biznearby.ui.home.HomeViewModel;
 import com.sneyder.biznearby.ui.login.LogInViewModel;
 import com.sneyder.biznearby.ui.moderators.ModeratorsViewModel;
 import com.sneyder.biznearby.ui.pick_city.PickCityViewModel;
+import com.sneyder.biznearby.ui.reports.ReportsViewModel;
 import com.sneyder.biznearby.ui.signup.SignUpViewModel;
 
 import dagger.Binds;
@@ -88,6 +89,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(ModeratorsViewModel.class)
   abstract ViewModel bindModeratorsViewModel(ModeratorsViewModel ModeratorsViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(ReportsViewModel.class)
+  abstract ViewModel bindReportsViewModel(ReportsViewModel ReportsViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -23,6 +24,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import java.io.UnsupportedEncodingException
 import com.sneyder.biznearby.data.model.Result
+import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.lang.NullPointerException
@@ -33,6 +35,14 @@ val Int.dp: Int
 
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+fun getLocationProvider(locationManager: LocationManager?): String? {
+    return when {
+        locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) == true -> LocationManager.GPS_PROVIDER
+        locationManager?.isProviderEnabled(LocationManager.NETWORK_PROVIDER) == true -> LocationManager.NETWORK_PROVIDER
+        else -> null
+    }
+}
 
 fun genRequestBody(content: String): RequestBody = RequestBody.create(MultipartBody.FORM, content)
 
@@ -125,6 +135,9 @@ fun Context.screenHeight(): Int {
 
 fun Context.notificationManager(): NotificationManager =
     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+fun Context.locationManager(): LocationManager =
+    getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
 @Throws(UnsupportedEncodingException::class)
 private fun getJson(strEncoded: String): String {

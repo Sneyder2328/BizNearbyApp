@@ -130,6 +130,7 @@ class HomeActivity : DaggerActivity() {
                     emailTextView.text = userProfile.email
                     typeUserTextView.text = userProfile.typeUser
                     Glide.with(this).load(userProfile.thumbnailUrl).centerCrop()
+                        .placeholder(R.drawable.person_placeholder)
                         .into(profileImageView)
                     invalidateOptionsMenu()
                     setUpNavView(navMenuItemsVisibleByUser(userProfile))

@@ -22,4 +22,10 @@
         android:name="com.sneyder.biznearby.ui.moderators.ModeratorsFragment"
         android:label="Moderadores"
         tools:layout="@layout/fragment_moderators" />
+
+    <fragment
+        android:id="@+id/nav_reports"
+        android:name="com.sneyder.biznearby.ui.reports.ReportsFragment"
+        android:label="Reportes"
+        tools:layout="@layout/fragment_report" />
 </navigation>

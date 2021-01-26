@@ -1,23 +1,45 @@
 package com.sneyder.biznearby.ui.explore
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
+import com.sneyder.biznearby.ui.explore.results.ResultsAdapter
+import com.sneyder.biznearby.utils.debug
+import com.sneyder.biznearby.utils.getLocationProvider
+import com.sneyder.biznearby.utils.locationManager
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.fragment_explore.*
+import java.lang.Exception
 
-class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
+class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
 
-    private val exploreViewModel: ExploreViewModel by viewModels { viewModelFactory }
-    private lateinit var googleMap: GoogleMap
+    private val viewModel: ExploreViewModel by viewModels { viewModelFactory }
+    private var googleMap: GoogleMap? = null
+    private var currentLatLng: LatLng? = null
+        set(value) {
+            field = value
+            if (value != null) queryEditText.visibility = View.VISIBLE
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,10 +49,39 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
+    private val resultsAdapter by lazy {
+        ResultsAdapter()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
+        setUpRecyclerView()
+        observeResultsBusinesses()
+        queryEditText.addTextChangedListener { text ->
+            debug("after text changed $text")
+            currentLatLng?.let {
+                viewModel.searchBusinesses(text.toString(), it.latitude, it.longitude, 2000)
+            }
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        with(resultsRecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = resultsAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+    }
+
+    private fun observeResultsBusinesses() {
+        viewModel.resultBusinesses.observe(viewLifecycleOwner) {
+            debug("observe results = $it")
+            it.success?.let { results ->
+                resultsAdapter.results = results
+            }
+        }
     }
 
 
@@ -43,36 +94,67 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
+        try {
+            googleMap?.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json))
+        } catch (e: Exception){}
+        ifHasPermission(
+            permissionsToAskFor = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        googleMap.isMyLocationEnabled = true
+            ), 101, {
+                googleMap?.uiSettings?.isMyLocationButtonEnabled = false
+                googleMap?.isMyLocationEnabled = true
+                displayUserLocation()
+            }
+        )
+    }
 
-        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(
-//            MarkerOptions()
-//                .position(sydney)
-//                .title("Marker in Sydney")
-//        )
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    @SuppressLint("MissingPermission")
+    private fun displayUserLocation() {
+        val locManager = requireContext().locationManager()
+
+        val location = locManager.getLastKnownLocation(
+            getLocationProvider(locManager) ?: return
+        )
+        if (location != null) {
+            debug("my location= $location")
+            currentLatLng = LatLng(location.latitude, location.longitude)
+            moveMapCamera()
+        } else {
+            registerLocationListener(locManager)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun registerLocationListener(locationManager: LocationManager?) {
+        locationManager?.requestSingleUpdate(
+            getLocationProvider(locationManager) ?: return,
+            this,
+            null
+        )
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        debug("ExploreFr onLocationChanged $location")
+        if (location == null) return
+        currentLatLng = LatLng(location.latitude, location.longitude)
+        moveMapCamera()
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    override fun onProviderEnabled(provider: String?) {}
+    override fun onProviderDisabled(provider: String?) {}
+
+    private fun moveMapCamera() {
+        if (currentLatLng == null) return
+        val cameraPosition = CameraPosition.Builder()
+            .target(currentLatLng) // Sets the center of the map to the user's location
+            .zoom(17f)            // Sets the zoom
+            .build()              // Creates a CameraPosition from the builder
+        googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
     override fun onResume() {

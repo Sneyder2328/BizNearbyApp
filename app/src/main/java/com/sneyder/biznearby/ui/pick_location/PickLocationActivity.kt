@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.utils.base.DaggerActivity
 import com.sneyder.biznearby.utils.debug
+import com.sneyder.biznearby.utils.getLocationProvider
 
 
 class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListener {
@@ -61,13 +62,6 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
         mapFragment.getMapAsync(this)
     }
 
-    private fun getLocationProvider(locationManager: LocationManager?): String? {
-        return when {
-            locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) == true -> LocationManager.GPS_PROVIDER
-            locationManager?.isProviderEnabled(LocationManager.NETWORK_PROVIDER) == true -> LocationManager.NETWORK_PROVIDER
-            else -> null
-        }
-    }
 
     /**
      * Manipulates the map once available.
@@ -81,13 +75,13 @@ class PickLocationActivity : DaggerActivity(), OnMapReadyCallback, LocationListe
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-        googleMap?.uiSettings?.isMyLocationButtonEnabled = true
         ifHasPermission(
             permissionsToAskFor = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), 101, {
                 debug("PickLocationAativity onMapReady permission for location  = true")
+                googleMap?.uiSettings?.isMyLocationButtonEnabled = true
                 googleMap?.isMyLocationEnabled = true
                 val latitude = intent.getDoubleExtra(EXTRA_LATITUDE, UNREACHABLE_GRADE)
                     .let { if (it != UNREACHABLE_GRADE) it else null }

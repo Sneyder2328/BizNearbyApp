@@ -24,9 +24,7 @@ class PickCityActivity : DaggerActivity() {
         const val EXTRA_CITY_NAME = "cityName"
 
         fun starterIntent(context: Context): Intent {
-            val starter = Intent(context, PickCityActivity::class.java)
-            //starter.putExtra(EXTRA_, )
-            return starter
+            return Intent(context, PickCityActivity::class.java)
         }
 
     }
@@ -43,18 +41,11 @@ class PickCityActivity : DaggerActivity() {
         setContentView(R.layout.activity_pick_city)
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setUpRecyclerView()
-//        saveButton.setOnClickListener {
-//            respondWithCityCode()
-//        }
-//        cancelButton.setOnClickListener {
-//            respondWithCancel()
-//        }
         queryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 debug("onTextChanged $s")
             }
-
             override fun afterTextChanged(s: Editable) {
                 debug("afterTextChanged $s")
                 viewModel.getLocations(s.toString())
