@@ -3,6 +3,7 @@ package com.sneyder.biznearby.ui.add_business
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -151,7 +152,31 @@ class AddBusinessFragment : DaggerFragment(), OnMapReadyCallback,
         }
         setUpListenersForScheduling()
         observeCategories()
+        observeBusinessCreated()
         viewModel.fetchCategories()
+    }
+
+    private var progressDialog: ProgressDialog? = null
+
+    private fun observeBusinessCreated() {
+        viewModel.businessCreated.observe(viewLifecycleOwner) {
+            when {
+                it.isLoading -> {
+                    progressDialog = ProgressDialog(context)
+                    progressDialog?.setCancelable(false)
+                    progressDialog?.setMessage("Subiendo imagen...")
+                    progressDialog?.show()
+                }
+                it.success != null -> {
+                    if (progressDialog?.isShowing == true)
+                        progressDialog?.dismiss()
+                }
+                else -> {
+                    if (progressDialog?.isShowing == true)
+                        progressDialog?.dismiss()
+                }
+            }
+        }
     }
 
     private fun saveBusiness() {

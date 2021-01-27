@@ -39,10 +39,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.BizNearby">
+        <activity android:name=".ui.business_details.BusinessDetailsActivity"></activity>
         <activity
             android:name=".ui.add_business_image.AddBizImageActivity"
             android:label="Vista previa"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ui.pick_city.PickCityActivity"
             android:label="Seleccionar ciudad"

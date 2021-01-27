@@ -24,6 +24,7 @@ import com.sneyder.biznearby.ViewModelProviderFactory;
 import com.sneyder.biznearby.di.ViewModelKey;
 import com.sneyder.biznearby.ui.add_business.AddBusinessViewModel;
 import com.sneyder.biznearby.ui.add_business_image.AddBizImageViewModel;
+import com.sneyder.biznearby.ui.business_details.BusinessDetailsViewModel;
 import com.sneyder.biznearby.ui.explore.ExploreViewModel;
 import com.sneyder.biznearby.ui.home.HomeViewModel;
 import com.sneyder.biznearby.ui.login.LogInViewModel;
@@ -94,6 +95,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(ReportsViewModel.class)
   abstract ViewModel bindReportsViewModel(ReportsViewModel ReportsViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(BusinessDetailsViewModel.class)
+  abstract ViewModel bindBusinessDetailsViewModel(BusinessDetailsViewModel BusinessDetailsViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

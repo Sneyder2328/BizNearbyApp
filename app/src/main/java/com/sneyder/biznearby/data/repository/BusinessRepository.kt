@@ -12,6 +12,8 @@ abstract class BusinessRepository {
 
     abstract suspend fun fetchReports(type: String): Result<ArrayList<Report>>
 
+    abstract suspend fun fetchBusiness(businessId: String): Result<Business>
+
     abstract suspend fun fetchCategories(): Result<ArrayList<Category>>
 
     abstract suspend fun uploadBusinessImage(imgPath: String): Result<String>

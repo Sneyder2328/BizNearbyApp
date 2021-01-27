@@ -19,6 +19,12 @@ class AppBusinessRepository
     private val bizNearbyApi: BizNearbyApi
 ) : BusinessRepository() {
 
+    override suspend fun fetchBusiness(businessId: String): Result<Business> {
+        return mapToResult({
+            bizNearbyApi.getBusinessDetails(businessId)
+        })
+    }
+
     override suspend fun searchBusinesses(
         query: String,
         latitude: Double,

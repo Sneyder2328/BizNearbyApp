@@ -34,8 +34,14 @@ interface BizNearbyApi {
 
         const val GET_REPORTS = "reports"
         const val SEARCH_BUSINESSES = "businesses"
+        const val GET_BUSINESS_DETAILS = "businesses/{businessId}"
 
     }
+
+    @GET(GET_BUSINESS_DETAILS)
+    suspend fun getBusinessDetails(
+        @Path("businessId") businessId: String
+    ): Business
 
     @GET(SEARCH_BUSINESSES)
     suspend fun searchBusinesses(

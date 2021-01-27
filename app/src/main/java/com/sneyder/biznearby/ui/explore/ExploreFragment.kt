@@ -2,7 +2,6 @@ package com.sneyder.biznearby.ui.explore
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -10,9 +9,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,11 +22,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
+import com.sneyder.biznearby.ui.business_details.BusinessDetailsActivity
 import com.sneyder.biznearby.ui.explore.results.ResultsAdapter
 import com.sneyder.biznearby.utils.debug
 import com.sneyder.biznearby.utils.getLocationProvider
 import com.sneyder.biznearby.utils.locationManager
-import dagger.android.support.DaggerAppCompatActivity
+import com.sneyder.biznearby.utils.throttleLatest
 import kotlinx.android.synthetic.main.fragment_explore.*
 import java.lang.Exception
 
@@ -50,7 +50,9 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
     }
 
     private val resultsAdapter by lazy {
-        ResultsAdapter()
+        ResultsAdapter {
+            startActivity(BusinessDetailsActivity.starterIntent(requireContext(), it))
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -59,11 +61,17 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
         mapView?.getMapAsync(this)
         setUpRecyclerView()
         observeResultsBusinesses()
+        val onQueryChange: (String) -> Unit = throttleLatest(
+            800L,
+            viewLifecycleOwner.lifecycleScope
+        ) { text ->
+            currentLatLng?.let {
+                viewModel.searchBusinesses(text, it.latitude, it.longitude, 2000)
+            }
+        }
         queryEditText.addTextChangedListener { text ->
             debug("after text changed $text")
-            currentLatLng?.let {
-                viewModel.searchBusinesses(text.toString(), it.latitude, it.longitude, 2000)
-            }
+            onQueryChange(text.toString())
         }
     }
 
@@ -98,8 +106,14 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         try {
-            googleMap?.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json))
-        } catch (e: Exception){}
+            googleMap?.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.style_json
+                )
+            )
+        } catch (e: Exception) {
+        }
         ifHasPermission(
             permissionsToAskFor = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,

@@ -9,7 +9,9 @@ import com.sneyder.biznearby.data.model.business.BizResult
 import kotlinx.android.synthetic.main.fragment_explore_result_item.view.*
 import kotlin.math.roundToInt
 
-class ResultsAdapter : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
+class ResultsAdapter(
+    private val onBusinessSelected: (businessId: String) -> Unit
+) : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
 
     var results: ArrayList<BizResult> = ArrayList()
         set(value) {
@@ -19,7 +21,8 @@ class ResultsAdapter : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
         return ResultViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_explore_result_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_explore_result_item, parent, false)
         )
     }
 
@@ -37,6 +40,9 @@ class ResultsAdapter : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
             view.titleTextView.text = bizResult.name
             view.subtitleTextView.text = bizResult.address.address
             view.distanceTextView.text = "${bizResult.distance.roundToInt()}m"
+            view.setOnClickListener {
+                onBusinessSelected(bizResult.id)
+            }
         }
     }
 

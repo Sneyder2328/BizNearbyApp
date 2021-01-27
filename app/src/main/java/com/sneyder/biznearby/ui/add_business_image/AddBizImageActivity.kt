@@ -53,7 +53,7 @@ class AddBizImageActivity : DaggerActivity() {
                 it.isLoading -> {
                     progressDialog = ProgressDialog(this)
                     progressDialog?.setCancelable(false)
-                    progressDialog?.setMessage("Subiendo imagen...")
+                    progressDialog?.setMessage("Registrando negocio...")
                     progressDialog?.show()
                 }
                 it.success != null -> {

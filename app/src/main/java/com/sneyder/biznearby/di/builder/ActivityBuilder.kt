@@ -18,6 +18,7 @@ package com.sneyder.biznearby.di.builder
 
 import com.sneyder.biznearby.ui.add_business.AddBusinessProvider
 import com.sneyder.biznearby.ui.add_business_image.AddBizImageActivity
+import com.sneyder.biznearby.ui.business_details.BusinessDetailsActivity
 import com.sneyder.biznearby.ui.home.HomeActivity
 import com.sneyder.biznearby.ui.explore.ExploreProvider
 import com.sneyder.biznearby.ui.login.LogInActivity
@@ -53,5 +54,8 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector()
     abstract fun bindAddBizImageActivity(): AddBizImageActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindBusinessDetailsActivity(): BusinessDetailsActivity
 
 }
