@@ -39,7 +39,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.BizNearby">
-        <activity android:name=".ui.business_details.BusinessDetailsActivity"></activity>
+        <activity
+            android:name=".ui.add_report.AddReportActivity"
+            android:label="Agregar reporte"/>
+        <activity
+            android:name=".ui.reports.ReportsActivity"
+            android:label="Reportes"/>
+        <activity android:name=".ui.add_business.AddBusinessActivity" />
+        <activity
+            android:name=".ui.my_businesses.MyBusinessesActivity"
+            android:label="Mis negocios" />
+        <activity
+            android:name=".ui.moderators.ModeratorsActivity"
+            android:label="Moderadores" />
+        <activity android:name=".ui.business_details.BusinessDetailsActivity" />
         <activity
             android:name=".ui.add_business_image.AddBizImageActivity"
             android:label="Vista previa"
@@ -47,7 +60,8 @@
         <activity
             android:name=".ui.pick_city.PickCityActivity"
             android:label="Seleccionar ciudad"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:windowSoftInputMode="stateVisible" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -81,7 +81,7 @@ class SelectImageDialog : BottomSheetDialogFragment() {
                 parentFragment as SelectImageListener
             }
             else -> {
-                throw RuntimeException("$context must implement SelectImageListener")
+                throw RuntimeException("$context or $parentFragment must implement SelectImageListener")
             }
         }
     }

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.user.UserProfile
-import kotlinx.android.synthetic.main.fragment_moderators_item.view.*
+import kotlinx.android.synthetic.main.activity_moderators_item.view.*
 
 class ModeratorsAdapter() : RecyclerView.Adapter<ModeratorsAdapter.ModeratorViewHolder>() {
 
@@ -20,7 +20,7 @@ class ModeratorsAdapter() : RecyclerView.Adapter<ModeratorsAdapter.ModeratorView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModeratorViewHolder {
         return ModeratorViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_moderators_item, parent, false)
+                .inflate(R.layout.activity_moderators_item, parent, false)
         )
     }
 

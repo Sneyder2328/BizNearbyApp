@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.ui.business_details.BusinessDetailsActivity
@@ -38,7 +39,20 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
     private var currentLatLng: LatLng? = null
         set(value) {
             field = value
-            if (value != null) queryEditText.visibility = View.VISIBLE
+//            if (value != null) queryEditText.visibility = View.VISIBLE
+        }
+    private var lastQuery: String = ""
+    var range: Int = 200
+        set(value) {
+            if (field != value) {
+                searchBusinesses(
+                    lastQuery,
+                    currentLatLng?.latitude,
+                    currentLatLng?.longitude,
+                    value
+                )
+            }
+            field = value
         }
 
     override fun onCreateView(
@@ -60,22 +74,70 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         setUpRecyclerView()
-        observeResultsBusinesses()
-        val onQueryChange: (String) -> Unit = throttleLatest(
-            800L,
-            viewLifecycleOwner.lifecycleScope
-        ) { text ->
-            currentLatLng?.let {
-                viewModel.searchBusinesses(text, it.latitude, it.longitude, 2000)
-            }
+        closeResultsButton?.setOnClickListener {
+            resultsAdapter.results = ArrayList()
+            viewInMap.visibility = View.GONE
+            closeResultsButton.visibility = View.GONE
+            resultsRecyclerView.visibility = View.GONE
+            googleMap?.clear()
         }
-        queryEditText.addTextChangedListener { text ->
-            debug("after text changed $text")
-            onQueryChange(text.toString())
+        viewInMap?.setOnClickListener {
+            viewInMap.visibility = View.GONE
+            closeResultsButton.visibility = View.GONE
+            resultsRecyclerView.visibility = View.GONE
+            googleMap?.clear()
+            displayMarkersForResults()
+        }
+        observeResultsBusinesses()
+
+//        queryEditText.addTextChangedListener { text ->
+//            debug("after text changed $text")
+//            onQueryChange(text.toString())
+//        }
+    }
+
+    private fun displayMarkersForResults() {
+        resultsAdapter.results.forEach {
+            googleMap?.addMarker(
+                MarkerOptions()
+                    .position(LatLng(it.address.latitude, it.address.longitude))
+                    .title(it.name)
+            )
         }
     }
 
+    fun onQueryChange(query: String) {
+        lastQuery = query
+        debug("onQueryChange $query")
+        throttleLatest(
+            intervalMs = 800L,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            destinationFunction = { text: String ->
+                searchBusinesses(text, currentLatLng?.latitude, currentLatLng?.longitude, range)
+            }
+        )(query)
+    }
+
+    private fun searchBusinesses(text: String, latitude: Double?, longitude: Double?, range: Int) {
+        debug("searchBusinesses $text $range")
+        if (text.isEmpty()) {
+            resultsAdapter.results = ArrayList()
+            return
+        }
+        viewModel.searchBusinesses(text, latitude ?: return, longitude ?: return, range)
+    }
+//
+//    val onQueryChange: (String) -> Unit = throttleLatest(
+//        800L,
+//        viewLifecycleOwner.lifecycleScope
+//    ) { text ->
+//        currentLatLng?.let {
+//            viewModel.searchBusinesses(text, it.latitude, it.longitude, 2000)
+//        }
+//    }
+
     private fun setUpRecyclerView() {
+        if (context == null) return
         with(resultsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = resultsAdapter
@@ -88,6 +150,11 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
             debug("observe results = $it")
             it.success?.let { results ->
                 resultsAdapter.results = results
+                if (results.count() > 0) {
+                    viewInMap.visibility = View.VISIBLE
+                    closeResultsButton.visibility = View.VISIBLE
+                    resultsRecyclerView.visibility = View.VISIBLE
+                }
             }
         }
     }

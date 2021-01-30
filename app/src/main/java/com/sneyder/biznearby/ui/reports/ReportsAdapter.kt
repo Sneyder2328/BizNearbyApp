@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.business.Report
-import kotlinx.android.synthetic.main.fragment_reports_item.view.*
+import kotlinx.android.synthetic.main.activity_reports_item.view.*
 
-class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.ReportViewHolder>() {
+class ReportsAdapter(
+    private val onReportDeleted: (reportId: String) -> Unit
+) : RecyclerView.Adapter<ReportsAdapter.ReportViewHolder>() {
 
     var reports = ArrayList<Report>()
         set(value) {
@@ -19,7 +21,7 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.ReportViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
         return ReportViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_reports_item, parent, false)
+                .inflate(R.layout.activity_reports_item, parent, false)
         )
     }
 
@@ -36,6 +38,9 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.ReportViewHolder>() {
         fun bind(report: Report) {
             view.titleTextView.text = report.title
             view.descriptionTextView.text = report.description
+            view.deleteButton.setOnClickListener {
+                onReportDeleted(report.id)
+            }
         }
 
     }

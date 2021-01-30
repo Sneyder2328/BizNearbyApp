@@ -260,25 +260,14 @@
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintTop_toBottomOf="@id/signUpButton"/>-->
 
-        <Button
-            android:id="@+id/signUpFacebookButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="FB"
-            app:layout_constraintEnd_toStartOf="@id/signUpGoogleButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line1" />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signUpGoogleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/signUpFacebookButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/signUpFacebookButton"
-            app:layout_constraintTop_toTopOf="@id/signUpFacebookButton" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line1" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

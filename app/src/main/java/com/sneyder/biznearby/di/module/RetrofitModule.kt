@@ -12,6 +12,7 @@ import com.sneyder.biznearby.utils.debug
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -24,15 +25,15 @@ class RetrofitModule {
     @Singleton
     fun provideHttpClient(prefs: PreferencesHelper): OkHttpClient {
         return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(45, TimeUnit.SECONDS)
+            .writeTimeout(45, TimeUnit.SECONDS)
+            .readTimeout(45, TimeUnit.SECONDS)
             .addNetworkInterceptor(StethoInterceptor())
-            .addInterceptor { chain->
+            .addInterceptor { chain ->
                 val accessToken: String? = prefs[AppPreferencesHelper.ACCESS_TOKEN]
-                debug("accessToken in interceptor $accessToken")
-                val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization","Bearer $accessToken")
+                val original: Request = chain.request()
+                val newRequest = original.newBuilder()
+                    .addHeader("Authorization", "Bearer $accessToken")
                     .build()
                 chain.proceed(newRequest)
             }

@@ -55,7 +55,7 @@ class AddBusinessViewModel
                 businessRepository.addNewBusiness(
                     Business(
                         userId = userId,
-                        businessId = businessId,
+                        id = businessId,
                         address = address,
                         name =name,
                         description=description,
@@ -67,6 +67,7 @@ class AddBusinessViewModel
                     )
                 )
             }
+            debug("result de agregar business=$result")
             businessCreated.value = result
         }
     }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        tools:context=".ui.add_business.AddBusinessFragment">
+
+        <TextView
+            android:id="@+id/scheduleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Horarios:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/mondayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="L"
+            app:layout_constraintEnd_toStartOf="@id/tuesdayChip"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/tuesdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="M"
+            app:layout_constraintEnd_toStartOf="@id/wednesdayChip"
+            app:layout_constraintStart_toEndOf="@id/mondayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/wednesdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="M"
+            app:layout_constraintEnd_toStartOf="@id/thursDayChip"
+            app:layout_constraintStart_toEndOf="@id/tuesdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/thursDayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="J"
+            app:layout_constraintEnd_toStartOf="@id/fridayChip"
+            app:layout_constraintStart_toEndOf="@id/wednesdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fridayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="V"
+            app:layout_constraintEnd_toStartOf="@id/saturdayChip"
+            app:layout_constraintStart_toEndOf="@id/thursDayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/saturdayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="S"
+            app:layout_constraintEnd_toStartOf="@id/sundayChip"
+            app:layout_constraintStart_toEndOf="@id/fridayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sundayChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipBackgroundColor="@color/lightGrey"
+            android:text="D"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/saturdayChip"
+            app:layout_constraintTop_toBottomOf="@id/scheduleTextView" />
+
+        <CheckBox
+            android:id="@+id/open24HrsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abierto 24 horas"
+            android:layout_marginTop="6dp"
+            app:layout_constraintEnd_toStartOf="@id/closedCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mondayChip" />
+
+        <CheckBox
+            android:id="@+id/closedCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Cerrado"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toEndOf="@id/open24HrsCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/mondayChip" />
+
+        <LinearLayout
+            android:id="@+id/hoursLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/open24HrsCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addHoursButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar horas"
+            android:layout_marginTop="4dp"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hoursLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -1,38 +1,42 @@
 package com.sneyder.biznearby.ui.home
 
+import android.R.attr.button
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.forEach
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.navigation.NavigationView
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.TypeUser
 import com.sneyder.biznearby.data.model.user.UserProfile
+import com.sneyder.biznearby.ui.add_business.AddBusinessActivity
+import com.sneyder.biznearby.ui.explore.ExploreFragment
 import com.sneyder.biznearby.ui.login.LogInActivity
+import com.sneyder.biznearby.ui.moderators.ModeratorsActivity
+import com.sneyder.biznearby.ui.my_businesses.MyBusinessesActivity
+import com.sneyder.biznearby.ui.reports.ReportsActivity
 import com.sneyder.biznearby.utils.base.DaggerActivity
 import com.sneyder.biznearby.utils.debug
+import com.sneyder.biznearby.utils.dp
+import com.sneyder.biznearby.utils.px
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
+
 
 class HomeActivity : DaggerActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val headerView by lazy { navView.getHeaderView(0) }
-    private val logInButton by lazy { headerView.findViewById<Button>(R.id.logInButton) }
     private val profileImageView by lazy { headerView.findViewById<ImageView>(R.id.profileImageView) }
     private val fullnameTextView by lazy { headerView.findViewById<TextView>(R.id.fullnameTextView) }
     private val typeUserTextView by lazy { headerView.findViewById<TextView>(R.id.typeUserTextView) }
@@ -43,11 +47,10 @@ class HomeActivity : DaggerActivity() {
 
         fun navMenuItemsVisibleByUser(user: UserProfile?): List<Int> {
             debug("navMenuItemsVisibleByUser $user")
-            if (user == null) return listOf(R.id.nav_explore)
+            if (user == null) return listOf()
             return when (user.getTypeUser()) {
                 TypeUser.ADMIN -> {
                     listOf(
-                        R.id.nav_explore,
                         R.id.nav_add_business,
                         R.id.nav_my_businesses,
                         R.id.nav_reports,
@@ -56,7 +59,6 @@ class HomeActivity : DaggerActivity() {
                 }
                 TypeUser.MODERATOR -> {
                     listOf(
-                        R.id.nav_explore,
                         R.id.nav_add_business,
                         R.id.nav_my_businesses,
                         R.id.nav_reports
@@ -64,7 +66,6 @@ class HomeActivity : DaggerActivity() {
                 }
                 TypeUser.NORMAL -> {
                     listOf(
-                        R.id.nav_explore,
                         R.id.nav_add_business,
                         R.id.nav_my_businesses,
                     )
@@ -78,15 +79,52 @@ class HomeActivity : DaggerActivity() {
 
     }
 
+    private val exploreFragment: ExploreFragment? by lazy {
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? ExploreFragment
+    }
+
+    private var isLoggedIn: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                headerView.visibility = View.VISIBLE
+                val params: FrameLayout.LayoutParams =
+                    FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 52.px)
+                params.gravity = Gravity.BOTTOM
+                params.setMargins(0, 0, 0, 0)
+                logInButton.text = "Cerrar sesión"
+            } else {
+                headerView.visibility = View.GONE
+                val params: FrameLayout.LayoutParams =
+                    FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 52.px)
+                params.gravity = Gravity.TOP
+                params.setMargins(params.leftMargin, 28.px, params.rightMargin, params.bottomMargin)
+                logInButton.layoutParams = params
+                logInButton.text = "Iniciar sesión"
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
-
-        logInButton.setOnClickListener { startActivity(LogInActivity.starterIntent(this)) }
-
+        logInButton?.setOnClickListener {
+            if (isLoggedIn) {
+                viewModel.logOut()
+            } else {
+                startActivity(LogInActivity.starterIntent(this))
+            }
+        }
+        queryEditText?.addTextChangedListener {
+            debug("text changed $it")
+            exploreFragment?.onQueryChange(it.toString())
+        }
         observeUserProfile()
         observeLogOutResponse()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.loadCurrentUserProfile()
     }
 
@@ -108,11 +146,11 @@ class HomeActivity : DaggerActivity() {
             debug("observeUserProfile $userProfile")
             when {
                 it == null || userProfile == null -> {
-                    logInButton.visibility = View.VISIBLE
-                    profileImageView.visibility = View.GONE
-                    fullnameTextView.visibility = View.GONE
-                    emailTextView.visibility = View.GONE
-                    typeUserTextView.visibility = View.GONE
+                    isLoggedIn = false
+//                    profileImageView.visibility = View.GONE
+//                    fullnameTextView.visibility = View.GONE
+//                    emailTextView.visibility = View.GONE
+//                    typeUserTextView.visibility = View.GONE
                     invalidateOptionsMenu()
                     setUpNavView(navMenuItemsVisibleByUser(userProfile))
                 }
@@ -120,10 +158,7 @@ class HomeActivity : DaggerActivity() {
 
                 }
                 else -> {
-                    logInButton.visibility = View.GONE
-                    profileImageView.visibility = View.VISIBLE
-                    fullnameTextView.visibility = View.VISIBLE
-                    emailTextView.visibility = View.VISIBLE
+                    isLoggedIn = true
                     typeUserTextView.visibility =
                         if (TypeUser.valueOf(userProfile.typeUser.toUpperCase(Locale.ROOT)) != TypeUser.NORMAL) View.VISIBLE else View.GONE
                     fullnameTextView.text = userProfile.fullname
@@ -140,16 +175,6 @@ class HomeActivity : DaggerActivity() {
     }
 
     private fun setUpNavView(menuItemsVisible: List<Int>) {
-        debug("setUpNavView $menuItemsVisible")
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            menuItemsVisible.toSet(), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
         ActionBarDrawerToggle(
             this@HomeActivity, drawerLayout, toolbar,
             R.string.navigation_drawer_open,
@@ -158,7 +183,16 @@ class HomeActivity : DaggerActivity() {
             drawerLayout.addDrawerListener(this)
             syncState()
         }
-
+        navView.setNavigationItemSelectedListener { menu ->
+            debug("menu item clicked ${menu.title}")
+            when (menu.itemId) {
+                R.id.nav_my_businesses -> startActivity(MyBusinessesActivity.starterIntent(this))
+                R.id.nav_moderators -> startActivity(ModeratorsActivity.starterIntent(this))
+                R.id.nav_add_business -> startActivity(AddBusinessActivity.starterIntent(this))
+                R.id.nav_reports -> startActivity(ReportsActivity.starterIntent(this))
+            }
+            true
+        }
         navView.menu.forEach {
             it.isVisible = menuItemsVisible.contains(it.itemId)
         }
@@ -167,23 +201,34 @@ class HomeActivity : DaggerActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.home, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+        val item = menu.findItem(R.id.range_spinner)
+        val spinner = item.actionView as Spinner
+        val adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.range_options, android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                exploreFragment?.range = when (position) {
+                    0 -> 200
+                    1 -> 500
+                    2 -> 1000
+                    else -> 2000
+                }
+            }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.action_log_out)?.isVisible = viewModel.userProfile.value != null
-        return super.onPrepareOptionsMenu(menu)
-    }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_log_out -> logOut()
+            }
         }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun logOut() {
-        viewModel.logOut()
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onSupportNavigateUp(): Boolean {

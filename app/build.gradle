@@ -89,6 +89,7 @@ dependencies {
   implementation 'com.google.dagger:dagger:2.17'
   implementation 'com.google.dagger:dagger-android-support:2.17'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
 // dont change because it gives probllems in compile time
   kapt 'com.google.dagger:dagger-compiler:2.17'
   kapt 'com.google.dagger:dagger-android-processor:2.17'

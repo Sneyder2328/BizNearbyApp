@@ -2,6 +2,7 @@
 
 package com.sneyder.biznearby.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Build.VERSION
+import android.os.Environment
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.view.View
@@ -31,8 +33,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
+import java.io.IOException
 import java.lang.NullPointerException
+import java.text.SimpleDateFormat
 import java.util.*
+
+@SuppressLint("SimpleDateFormat")
+@Throws(IOException::class)
+fun Context.createImageFile(): Pair<File, String> {
+    // Create an image file name
+    val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val file = File.createTempFile(
+        "JPEG_${timeStamp}_", /* prefix */
+        ".jpg", /* suffix */
+        storageDir /* directory */
+    )
+    return file to file.absolutePath
+}
 
 fun <T> throttleLatest(
     intervalMs: Long = 300L,
@@ -231,7 +250,6 @@ fun Context.toggleSoftInput() {
 
 suspend fun <T> mapToResult(sth: suspend () -> T?, onFinally: () -> Unit = {}): Result<T> {
     return try {
-        if (sth() == null) throw NullPointerException()
         Result(sth()).also {
             onFinally()
         }

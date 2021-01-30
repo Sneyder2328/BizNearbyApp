@@ -3,8 +3,21 @@ package com.sneyder.biznearby.data.preferences
 import android.content.SharedPreferences
 import android.os.Parcelable
 import androidx.core.content.edit
+import com.google.gson.GsonBuilder
+import com.sneyder.biznearby.data.model.user.UserProfile
 
 abstract class PreferencesHelper(val sharedPreferences: SharedPreferences) {
+
+    fun getCurrentUserProfile(): UserProfile? {
+        val json: String = get(AppPreferencesHelper.USER) ?: return null
+        return try {
+            GsonBuilder().serializeNulls().create()
+                .fromJson(json, UserProfile::class.java)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
     /**
      * puts a key value pair in shared prefs if doesn't exists, otherwise updates value on given [key]

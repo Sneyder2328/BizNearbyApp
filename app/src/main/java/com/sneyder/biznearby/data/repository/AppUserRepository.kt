@@ -27,8 +27,7 @@ import javax.inject.Singleton
 class AppUserRepository
 @Inject constructor(
     private val bizNearbyApi: BizNearbyApi,
-    private val prefs: PreferencesHelper,
-//    private val appDatabase: AppDatabase
+    private val prefs: PreferencesHelper
 ) : UserRepository() {
 
     override suspend fun addModerator(email: String): Result<Boolean> {
@@ -44,14 +43,7 @@ class AppUserRepository
     }
 
     override fun getCurrentUserProfile(): UserProfile? {
-        val json: String = prefs[USER] ?: return null
-        return try {
-            GsonBuilder().serializeNulls().create()
-                .fromJson(json, UserProfile::class.java)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        return prefs.getCurrentUserProfile()
     }
 
 //    private fun getAccessToken(): String {

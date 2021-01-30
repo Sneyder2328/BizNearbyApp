@@ -3,29 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_explore">
+    app:startDestination="@+id/nav_basic_info">
 
     <fragment
-        android:id="@+id/nav_explore"
-        android:name="com.sneyder.biznearby.ui.explore.ExploreFragment"
+        android:id="@+id/nav_basic_info"
+        android:name="com.sneyder.biznearby.ui.add_business.basic_info.BasicInfoFragment"
         android:label="@string/menu_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_basic_info" />
 
     <fragment
-        android:id="@+id/nav_add_business"
-        android:name="com.sneyder.biznearby.ui.add_business.AddBusinessFragment"
-        android:label="Nuevo registro"
-        tools:layout="@layout/fragment_add_business" />
-
-    <fragment
-        android:id="@+id/nav_moderators"
-        android:name="com.sneyder.biznearby.ui.moderators.ModeratorsFragment"
-        android:label="Moderadores"
-        tools:layout="@layout/fragment_moderators" />
-
-    <fragment
-        android:id="@+id/nav_reports"
-        android:name="com.sneyder.biznearby.ui.reports.ReportsFragment"
+        android:id="@+id/nav_address"
+        android:name="com.sneyder.biznearby.ui.add_business.address.AddressFragment"
         android:label="Reportes"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_address" />
+
+    <fragment
+        android:id="@+id/nav_schedule"
+        android:name="com.sneyder.biznearby.ui.add_business.schedule.ScheduleFragment"
+        android:label="Reportes"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/nav_images"
+        android:name="com.sneyder.biznearby.ui.add_business.images.ImagesFragment"
+        android:label="Reportes"
+        tools:layout="@layout/fragment_images" />
+
 </navigation>

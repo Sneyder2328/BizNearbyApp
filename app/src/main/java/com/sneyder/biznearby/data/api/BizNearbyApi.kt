@@ -2,10 +2,7 @@ package com.sneyder.biznearby.data.api
 
 import com.sneyder.biznearby.data.model.auth.LogInRequest
 import com.sneyder.biznearby.data.model.auth.LogOutResponse
-import com.sneyder.biznearby.data.model.business.BizResult
-import com.sneyder.biznearby.data.model.business.Business
-import com.sneyder.biznearby.data.model.business.Category
-import com.sneyder.biznearby.data.model.business.Report
+import com.sneyder.biznearby.data.model.business.*
 import com.sneyder.biznearby.data.model.model.CityLocation
 import com.sneyder.biznearby.data.model.user.UserProfile
 import okhttp3.MultipartBody
@@ -33,10 +30,29 @@ interface BizNearbyApi {
         const val ADD_MODERATORS = "moderators/{email}"
 
         const val GET_REPORTS = "reports"
+        const val DELETE_REPORT = "reports/{reportId}"
+        const val ADD_REPORT = "reports"
         const val SEARCH_BUSINESSES = "businesses"
         const val GET_BUSINESS_DETAILS = "businesses/{businessId}"
 
+        const val GET_MY_BUSINESSES = "/users/{userId}/businesses"
+
     }
+
+    @DELETE(DELETE_REPORT)
+    suspend fun deleteReport(
+        @Path("reportId") reportId: String
+    ): Boolean
+
+    @POST(ADD_REPORT)
+    suspend fun addReport(
+        @Body report: ReportRequest
+    ): Report
+
+    @GET(GET_MY_BUSINESSES)
+    suspend fun getMyBusinesses(
+        @Path("userId") userId: String
+    ): List<Business>
 
     @GET(GET_BUSINESS_DETAILS)
     suspend fun getBusinessDetails(
@@ -125,6 +141,5 @@ interface BizNearbyApi {
 
     @DELETE(LOG_OUT)
     suspend fun logOut(): LogOutResponse
-
 
 }

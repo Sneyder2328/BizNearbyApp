@@ -23,12 +23,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sneyder.biznearby.ViewModelProviderFactory;
 import com.sneyder.biznearby.di.ViewModelKey;
 import com.sneyder.biznearby.ui.add_business.AddBusinessViewModel;
+import com.sneyder.biznearby.ui.add_business.basic_info.BasicInfoViewModel;
 import com.sneyder.biznearby.ui.add_business_image.AddBizImageViewModel;
+import com.sneyder.biznearby.ui.add_report.AddReportViewModel;
 import com.sneyder.biznearby.ui.business_details.BusinessDetailsViewModel;
 import com.sneyder.biznearby.ui.explore.ExploreViewModel;
 import com.sneyder.biznearby.ui.home.HomeViewModel;
 import com.sneyder.biznearby.ui.login.LogInViewModel;
 import com.sneyder.biznearby.ui.moderators.ModeratorsViewModel;
+import com.sneyder.biznearby.ui.my_businesses.MyBusinessesViewModel;
 import com.sneyder.biznearby.ui.pick_city.PickCityViewModel;
 import com.sneyder.biznearby.ui.reports.ReportsViewModel;
 import com.sneyder.biznearby.ui.signup.SignUpViewModel;
@@ -40,16 +43,6 @@ import dagger.multibindings.IntoMap;
 @SuppressWarnings(value = "unused")
 @Module
 public abstract class ViewModelModule {
-
-//  @Binds
-//  @IntoMap
-//  @ViewModelKey(CategoriesViewModel.class)
-//  abstract ViewModel bindCategoriesViewModel(CategoriesViewModel viewModel);
-//
-//  @Binds
-//  @IntoMap
-//  @ViewModelKey(MainViewModel.class)
-//  abstract ViewModel bindMainViewModel(MainViewModel MainViewModel);
 
   @Binds
   @IntoMap
@@ -100,6 +93,21 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(BusinessDetailsViewModel.class)
   abstract ViewModel bindBusinessDetailsViewModel(BusinessDetailsViewModel BusinessDetailsViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(MyBusinessesViewModel.class)
+  abstract ViewModel bindMyBusinessesViewModel(MyBusinessesViewModel MyBusinessesViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(BasicInfoViewModel.class)
+  abstract ViewModel bindBasicInfoViewModel(BasicInfoViewModel BasicInfoViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(AddReportViewModel.class)
+  abstract ViewModel bindAddReportViewModel(AddReportViewModel AddReportViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

@@ -2,10 +2,8 @@ package com.sneyder.biznearby.data.repository
 
 import com.sneyder.biznearby.data.api.BizNearbyApi
 import com.sneyder.biznearby.data.model.Result
-import com.sneyder.biznearby.data.model.business.BizResult
-import com.sneyder.biznearby.data.model.business.Business
-import com.sneyder.biznearby.data.model.business.Category
-import com.sneyder.biznearby.data.model.business.Report
+import com.sneyder.biznearby.data.model.business.*
+import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.getMimeType
 import com.sneyder.biznearby.utils.mapToResult
 import okhttp3.MediaType
@@ -16,8 +14,15 @@ import javax.inject.Inject
 
 class AppBusinessRepository
 @Inject constructor(
-    private val bizNearbyApi: BizNearbyApi
+    private val bizNearbyApi: BizNearbyApi,
+    private val prefs: PreferencesHelper
 ) : BusinessRepository() {
+
+    override suspend fun getMyBusinesses(): Result<List<Business>> {
+        return mapToResult({
+            bizNearbyApi.getMyBusinesses(prefs.getCurrentUserProfile()!!.id)
+        })
+    }
 
     override suspend fun fetchBusiness(businessId: String): Result<Business> {
         return mapToResult({
@@ -64,6 +69,18 @@ class AppBusinessRepository
     override suspend fun addNewBusiness(business: Business): Result<Business> {
         return mapToResult({
             bizNearbyApi.addBusiness(business)
+        })
+    }
+
+    override suspend fun addNewReport(report: ReportRequest): Result<Report> {
+        return mapToResult({
+            bizNearbyApi.addReport(report)
+        })
+    }
+
+    override suspend fun deleteReport(reportId: String): Result<Boolean> {
+        return mapToResult({
+            bizNearbyApi.deleteReport(reportId)
         })
     }
 }

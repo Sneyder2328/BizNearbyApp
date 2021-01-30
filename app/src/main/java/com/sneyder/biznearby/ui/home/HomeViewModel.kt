@@ -23,14 +23,18 @@ class HomeViewModel
     val logOutResponse by lazy { MutableLiveData<Result<LogOutResponse>>() }
 
     fun loadCurrentUserProfile() {
+        debug("loadCurrentUserProfile")
         val currentUserProfile = userRepository.getCurrentUserProfile()
         userProfile.value = Result(success = currentUserProfile)
         debug("currentUserProfile=$currentUserProfile")
         currentUserProfile?.let {
             viewModelScope.launch {
                 val result = withContext(IO) { userRepository.fetchUserProfile(it.id) }
-                if (result.error?.message == "HTTP 401 Unauthorized") logOut()
-                userProfile.value = result
+                if (result.error?.message == "HTTP 401 Unauthorized") {
+                    logOut()
+                } else{
+                    userProfile.value = Result(currentUserProfile)
+                }
                 debug("loadCurrentUserProfile result=$result")
             }
         }

@@ -3,11 +3,13 @@ package com.sneyder.biznearby.ui.business_details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.sneyder.biznearby.R
+import com.sneyder.biznearby.ui.add_report.AddReportActivity
 import com.sneyder.biznearby.utils.GridSpacingItemDecoration
 import com.sneyder.biznearby.utils.base.DaggerActivity
 import com.sneyder.biznearby.utils.debug
@@ -67,8 +69,24 @@ class BusinessDetailsActivity : DaggerActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_details_business_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_report -> {
+                val business = viewModel.business.value?.success ?: return true
+                startActivity(
+                    AddReportActivity.starterIntent(
+                        this,
+                        businessId = business.id,
+                        businessName = business.name
+                    )
+                )
+                true
+            }
             android.R.id.home -> {
                 finish()
                 true
