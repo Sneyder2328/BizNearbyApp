@@ -23,4 +23,6 @@ abstract class BusinessRepository {
 
     abstract suspend fun deleteReport(reportId: String): Result<Boolean>
 
+    abstract suspend fun reviewReport(reportId: String, reviewReportRequest: ReviewReportRequest): Result<Report>
+
 }

@@ -31,7 +31,6 @@ class AddBusinessActivity : DaggerActivity() {
     companion object {
 
         const val NUM_FRAGMENTS = 4
-        val titles by lazy { arrayOf("Informacion basica", "Direccion", "Horarios", "Imagenes") }
 
         fun starterIntent(context: Context): Intent {
             return Intent(context, AddBusinessActivity::class.java)
@@ -107,7 +106,6 @@ class AddBusinessActivity : DaggerActivity() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             debug("onPageSelected $position")
-            supportActionBar?.title = titles[position]
             backButton.text = if (canGoBack()) "Atras" else "Cancelar"
             nextButton.text = if (canGoForward()) "Siguiente" else "Guardar"
         }

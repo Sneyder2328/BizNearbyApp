@@ -18,8 +18,6 @@ import com.google.android.material.chip.Chip
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.business.Category
 import com.sneyder.biznearby.ui.add_business.AddBusinessActivity
-import com.sneyder.biznearby.ui.add_business.AddBusinessFragment
-import com.sneyder.biznearby.ui.add_business.AddBusinessViewModel
 import com.sneyder.biznearby.ui.add_business_image.AddBizImageActivity
 import com.sneyder.biznearby.utils.*
 import com.sneyder.biznearby.utils.base.DaggerFragment

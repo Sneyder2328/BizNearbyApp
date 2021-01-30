@@ -13,7 +13,7 @@ import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.debug
 import com.sneyder.biznearby.utils.genRequestBody
 import com.sneyder.biznearby.utils.getMimeType
-import com.sneyder.biznearby.utils.mapToResult
+import com.sneyder.biznearby.utils.safeApiCall
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -31,13 +31,13 @@ class AppUserRepository
 ) : UserRepository() {
 
     override suspend fun addModerator(email: String): Result<Boolean> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.addModerator(email)
         })
     }
 
     override suspend fun fetchModerators(): Result<List<UserProfile>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.getModerators()
         })
     }
@@ -52,7 +52,7 @@ class AppUserRepository
 //    }
 
     override suspend fun fetchUserProfile(userId: String): Result<UserProfile> {
-        return mapToResult({
+        return safeApiCall({
             val userProfile = bizNearbyApi.getUserProfile(
                 userId = userId
             )
@@ -88,7 +88,7 @@ class AppUserRepository
         }
         response.body()?.let { saveUserToPrefs(it) }
 
-        return mapToResult({
+        return safeApiCall({
             response.body()
         })
     }
@@ -106,13 +106,13 @@ class AppUserRepository
         }
         response.body()?.let { saveUserToPrefs(it) }
 
-        return mapToResult({
+        return safeApiCall({
             response.body()
         })
     }
 
     override suspend fun logOut(): Result<LogOutResponse> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.logOut()
         }, onFinally = {
             prefs[USER] = ""

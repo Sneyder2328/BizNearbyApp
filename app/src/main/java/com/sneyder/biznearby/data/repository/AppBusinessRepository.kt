@@ -5,7 +5,7 @@ import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.business.*
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
 import com.sneyder.biznearby.utils.getMimeType
-import com.sneyder.biznearby.utils.mapToResult
+import com.sneyder.biznearby.utils.safeApiCall
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -19,13 +19,13 @@ class AppBusinessRepository
 ) : BusinessRepository() {
 
     override suspend fun getMyBusinesses(): Result<List<Business>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.getMyBusinesses(prefs.getCurrentUserProfile()!!.id)
         })
     }
 
     override suspend fun fetchBusiness(businessId: String): Result<Business> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.getBusinessDetails(businessId)
         })
     }
@@ -36,19 +36,19 @@ class AppBusinessRepository
         longitude: Double,
         radius: Int
     ): Result<ArrayList<BizResult>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.searchBusinesses(query, latitude, longitude, radius)
         })
     }
 
     override suspend fun fetchReports(type: String): Result<ArrayList<Report>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.getReports(type)
         })
     }
 
     override suspend fun fetchCategories(): Result<ArrayList<Category>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.fetchBusinessCategories()
         })
     }
@@ -60,27 +60,33 @@ class AppBusinessRepository
         // MultipartBody.Part is used to send also the actual file name
         val businessImage: MultipartBody.Part =
             MultipartBody.Part.createFormData("businessImage", file.name, requestBody)
-
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.uploadBusinessImage(businessImage)
         })
     }
 
     override suspend fun addNewBusiness(business: Business): Result<Business> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.addBusiness(business)
         })
     }
 
     override suspend fun addNewReport(report: ReportRequest): Result<Report> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.addReport(report)
         })
     }
 
     override suspend fun deleteReport(reportId: String): Result<Boolean> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.deleteReport(reportId)
         })
     }
+
+    override suspend fun reviewReport(reportId: String, reviewReportRequest: ReviewReportRequest): Result<Report> {
+        return safeApiCall({
+            bizNearbyApi.reviewReport(reportId, reviewReportRequest)
+        })
+    }
+
 }

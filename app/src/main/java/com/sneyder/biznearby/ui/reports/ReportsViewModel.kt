@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.business.Report
+import com.sneyder.biznearby.data.model.business.ReviewReportRequest
 import com.sneyder.biznearby.data.repository.BusinessRepository
 import com.sneyder.biznearby.utils.base.BaseViewModel
 import com.sneyder.biznearby.utils.coroutines.CoroutineContextProvider
@@ -34,6 +35,18 @@ class ReportsViewModel
     fun deleteReport(reportId: String) {
         viewModelScope.launch {
             val result = withContext(IO) { businessRepository.deleteReport(reportId) }
+            fetchReports(type)
+        }
+    }
+
+    fun reviewReport(reportId: String, analysis: String) {
+        viewModelScope.launch {
+            val result = withContext(IO) {
+                businessRepository.reviewReport(
+                    reportId,
+                    ReviewReportRequest(analysis)
+                )
+            }
             fetchReports(type)
         }
     }

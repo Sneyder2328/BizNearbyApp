@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.ui.add_business.AddBusinessActivity
@@ -42,6 +43,7 @@ class MyBusinessesActivity : DaggerActivity() {
     private fun setUpRecyclerView() {
         with(myBusinessesRecyclerView) {
             layoutManager = LinearLayoutManager(this@MyBusinessesActivity)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = myBusinessesAdapter
         }
     }

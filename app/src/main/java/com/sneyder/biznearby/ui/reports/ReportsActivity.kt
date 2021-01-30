@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.utils.base.DaggerActivity
+import com.sneyder.biznearby.utils.dialogs.EditTextDialog
 import kotlinx.android.synthetic.main.activity_report.*
 
-class ReportsActivity : DaggerActivity() {
+class ReportsActivity : DaggerActivity(), EditTextDialog.EditTextDialogListener {
 
     companion object {
 
@@ -27,11 +28,24 @@ class ReportsActivity : DaggerActivity() {
     }
 
     private val viewModel by viewModels<ReportsViewModel> { viewModelFactory }
+    private var reportSelectedId: String? = null
     private val reportsAdapter by lazy {
-        ReportsAdapter(onReportDeleted = { reportId ->
-            viewModel.deleteReport(reportId)
-        })
+        ReportsAdapter(
+            onReportSelected = { reportId ->
+                reportSelectedId = reportId
+                val dialog = EditTextDialog.newInstance("Revisar reporte", "", "Analisis")
+                dialog.show(supportFragmentManager, dialog.tag)
+            },
+            onReportDeleted = { reportId ->
+                viewModel.deleteReport(reportId)
+            })
     }
+
+    override fun onTextEntered(text: String) {
+        viewModel.reviewReport(reportSelectedId ?: return, text)
+        reportSelectedId = null
+    }
+
     private var type: String = "All"
         set(value) {
             if (field != value) viewModel.fetchReports(value)

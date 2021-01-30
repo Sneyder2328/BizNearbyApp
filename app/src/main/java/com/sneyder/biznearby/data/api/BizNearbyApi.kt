@@ -30,6 +30,7 @@ interface BizNearbyApi {
         const val ADD_MODERATORS = "moderators/{email}"
 
         const val GET_REPORTS = "reports"
+        const val REVIEW_REPORT = "reports/{reportId}"
         const val DELETE_REPORT = "reports/{reportId}"
         const val ADD_REPORT = "reports"
         const val SEARCH_BUSINESSES = "businesses"
@@ -38,6 +39,12 @@ interface BizNearbyApi {
         const val GET_MY_BUSINESSES = "/users/{userId}/businesses"
 
     }
+
+    @POST(REVIEW_REPORT)
+    suspend fun reviewReport(
+        @Path("reportId") reportId: String,
+        @Body reviewReportRequest: ReviewReportRequest
+    ): Report
 
     @DELETE(DELETE_REPORT)
     suspend fun deleteReport(

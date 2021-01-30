@@ -4,7 +4,7 @@ import com.sneyder.biznearby.data.api.BizNearbyApi
 import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.model.CityLocation
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
-import com.sneyder.biznearby.utils.mapToResult
+import com.sneyder.biznearby.utils.safeApiCall
 import javax.inject.Inject
 
 class AppLocationsRepository
@@ -14,7 +14,7 @@ class AppLocationsRepository
     ): LocationsRepository() {
 
     override suspend fun fetchLocations(query: String): Result<ArrayList<CityLocation>> {
-        return mapToResult({
+        return safeApiCall({
             bizNearbyApi.searchCityLocations(
                 query = query,
                 limit = 10

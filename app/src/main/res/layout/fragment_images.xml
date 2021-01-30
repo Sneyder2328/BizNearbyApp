@@ -11,8 +11,7 @@
         android:id="@+id/imagesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        style="@style/Subtitle"
         android:text="Imagenes"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.ui.add_business.AddBusinessActivity
-import com.sneyder.biznearby.ui.add_business.AddBusinessFragment
 import com.sneyder.biznearby.ui.pick_city.PickCityActivity
 import com.sneyder.biznearby.ui.pick_location.PickLocationActivity
 import com.sneyder.biznearby.utils.FieldsValidator
@@ -28,6 +27,8 @@ class AddressFragment : DaggerFragment(), AddBusinessActivity.InputsValidation, 
     companion object {
         const val REQUEST_LOCATION_DETAILS = 10002
         const val REQUEST_CITY = 10003
+        const val UNREACHABLE_GRADE = 500.0
+        const val UNREACHABLE_CITY_CODE = -1
 
         fun newInstance() = AddressFragment()
     }
@@ -124,15 +125,15 @@ class AddressFragment : DaggerFragment(), AddBusinessActivity.InputsValidation, 
                 val latitude =
                     data.getDoubleExtra(
                         PickLocationActivity.EXTRA_LATITUDE,
-                        AddBusinessFragment.UNREACHABLE_GRADE
+                        UNREACHABLE_GRADE
                     )
-                        .let { if (it != AddBusinessFragment.UNREACHABLE_GRADE) it else null }
+                        .let { if (it != UNREACHABLE_GRADE) it else null }
                 val longitude =
                     data.getDoubleExtra(
                         PickLocationActivity.EXTRA_LONGITUDE,
-                        AddBusinessFragment.UNREACHABLE_GRADE
+                        UNREACHABLE_GRADE
                     )
-                        .let { if (it != AddBusinessFragment.UNREACHABLE_GRADE) it else null }
+                        .let { if (it != UNREACHABLE_GRADE) it else null }
                 locationSelected = LatLng(latitude ?: return, longitude ?: return)
                 debug("onActivityResult success $latitude $longitude")
                 addMarkerToMap(locationSelected ?: return)
@@ -142,9 +143,9 @@ class AddressFragment : DaggerFragment(), AddBusinessActivity.InputsValidation, 
                 cityCodeSelected =
                     data.getIntExtra(
                         PickCityActivity.EXTRA_CITY_CODE,
-                        AddBusinessFragment.UNREACHABLE_CITY_CODE
+                        UNREACHABLE_CITY_CODE
                     )
-                        .let { if (it != AddBusinessFragment.UNREACHABLE_CITY_CODE) it else null }
+                        .let { if (it != UNREACHABLE_CITY_CODE) it else null }
                 cityDescSelected = data.getStringExtra(PickCityActivity.EXTRA_CITY_NAME)
             }
         }

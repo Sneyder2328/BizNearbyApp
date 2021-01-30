@@ -1,12 +1,10 @@
 package com.sneyder.biznearby.ui.home
 
-import android.R.attr.button
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.forEach
@@ -15,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.bumptech.glide.Glide
-import com.google.android.material.navigation.NavigationView
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.data.model.TypeUser
 import com.sneyder.biznearby.data.model.user.UserProfile
@@ -27,7 +24,6 @@ import com.sneyder.biznearby.ui.my_businesses.MyBusinessesActivity
 import com.sneyder.biznearby.ui.reports.ReportsActivity
 import com.sneyder.biznearby.utils.base.DaggerActivity
 import com.sneyder.biznearby.utils.debug
-import com.sneyder.biznearby.utils.dp
 import com.sneyder.biznearby.utils.px
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
@@ -151,7 +147,6 @@ class HomeActivity : DaggerActivity() {
 //                    fullnameTextView.visibility = View.GONE
 //                    emailTextView.visibility = View.GONE
 //                    typeUserTextView.visibility = View.GONE
-                    invalidateOptionsMenu()
                     setUpNavView(navMenuItemsVisibleByUser(userProfile))
                 }
                 it.isLoading -> {
@@ -167,7 +162,6 @@ class HomeActivity : DaggerActivity() {
                     Glide.with(this).load(userProfile.thumbnailUrl).centerCrop()
                         .placeholder(R.drawable.person_placeholder)
                         .into(profileImageView)
-                    invalidateOptionsMenu()
                     setUpNavView(navMenuItemsVisibleByUser(userProfile))
                 }
             }
@@ -184,7 +178,6 @@ class HomeActivity : DaggerActivity() {
             syncState()
         }
         navView.setNavigationItemSelectedListener { menu ->
-            debug("menu item clicked ${menu.title}")
             when (menu.itemId) {
                 R.id.nav_my_businesses -> startActivity(MyBusinessesActivity.starterIntent(this))
                 R.id.nav_moderators -> startActivity(ModeratorsActivity.starterIntent(this))

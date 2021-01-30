@@ -248,7 +248,7 @@ fun Context.toggleSoftInput() {
 }
 
 
-suspend fun <T> mapToResult(sth: suspend () -> T?, onFinally: () -> Unit = {}): Result<T> {
+suspend fun <T> safeApiCall(sth: suspend () -> T?, onFinally: () -> Unit = {}): Result<T> {
     return try {
         Result(sth()).also {
             onFinally()

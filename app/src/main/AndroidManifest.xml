@@ -41,11 +41,13 @@
         android:theme="@style/Theme.BizNearby">
         <activity
             android:name=".ui.add_report.AddReportActivity"
-            android:label="Agregar reporte"/>
+            android:label="Agregar reporte" />
         <activity
             android:name=".ui.reports.ReportsActivity"
-            android:label="Reportes"/>
-        <activity android:name=".ui.add_business.AddBusinessActivity" />
+            android:label="Reportes" />
+        <activity
+            android:name=".ui.add_business.AddBusinessActivity"
+            android:label="Registrar negocio" />
         <activity
             android:name=".ui.my_businesses.MyBusinessesActivity"
             android:label="Mis negocios" />

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.utils.base.DaggerActivity
@@ -66,6 +67,7 @@ class ModeratorsActivity : DaggerActivity(), EditTextDialog.EditTextDialogListen
     private fun setUpRecyclerView() {
         with(moderatorsRecyclerView) {
             layoutManager = LinearLayoutManager(this@ModeratorsActivity)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = moderatorsAdapter
         }
     }
