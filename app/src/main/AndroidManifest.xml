@@ -82,9 +82,11 @@
         <activity
             android:name=".ui.login.LogInActivity"
             android:theme="@style/Theme.BizNearby"
+            android:label="Iniciar sesión"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.signup.SignUpActivity"
+            android:label="Crear cuenta"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.home.HomeActivity"

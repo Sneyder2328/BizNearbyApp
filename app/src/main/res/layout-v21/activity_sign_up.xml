@@ -13,19 +13,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/registerTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="Registrate"
-            android:textColor="#0079E3"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
         <FrameLayout
             android:id="@+id/photoContainer"
             android:layout_width="110dp"
@@ -33,7 +20,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerTextView">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.sneyder.biznearby.utils.CircleImageView
                 android:id="@+id/photoImageView"
@@ -271,33 +258,14 @@
             app:layout_constraintStart_toEndOf="@id/orTextView"
             app:layout_constraintTop_toBottomOf="@id/signUpButton" />
 
-        <!--        <com.facebook.login.widget.LoginButton-->
-        <!--            android:id="@+id/signUpFacebookButton"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/signUpButton"/>-->
-
-        <Button
-            android:id="@+id/signUpFacebookButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="FB"
-            app:layout_constraintEnd_toStartOf="@id/signUpGoogleButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line1" />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signUpGoogleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/signUpFacebookButton"
+            app:layout_constraintTop_toBottomOf="@id/line1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/signUpFacebookButton"
-            app:layout_constraintTop_toTopOf="@id/signUpFacebookButton" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

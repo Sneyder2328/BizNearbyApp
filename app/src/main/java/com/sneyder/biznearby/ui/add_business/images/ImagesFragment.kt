@@ -19,7 +19,6 @@ import com.sneyder.biznearby.ui.add_business_image.AddBizImageActivity
 import com.sneyder.biznearby.utils.*
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.utils.dialogs.SelectImageDialog
-import kotlinx.android.synthetic.main.fragment_add_business.*
 import kotlinx.android.synthetic.main.fragment_images.*
 import java.io.IOException
 

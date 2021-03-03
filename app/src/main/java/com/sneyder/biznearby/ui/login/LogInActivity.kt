@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -46,6 +47,7 @@ class LogInActivity : DaggerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpGoogleLogin()
         registerTextView.setOnClickListener {
             startActivity(SignUpActivity.starterIntent(this))
@@ -148,6 +150,13 @@ class LogInActivity : DaggerActivity() {
             email = email,
             typeLogin = TypeLogin.GOOGLE
         )
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

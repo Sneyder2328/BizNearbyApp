@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
@@ -96,7 +97,7 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         countryPhoneCodeView.setOnClickListener {
             showCountryCodeDialog()
         }
@@ -411,4 +412,12 @@ class SignUpActivity : DaggerActivity(), SelectImageDialog.SelectImageListener {
         val alert: AlertDialog = dialog.create()
         alert.show()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

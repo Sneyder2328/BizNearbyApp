@@ -22,7 +22,6 @@ import com.sneyder.biznearby.ui.add_business_image.AddBizImageActivity
 import com.sneyder.biznearby.utils.*
 import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.utils.dialogs.SelectImageDialog
-import kotlinx.android.synthetic.main.fragment_add_business.*
 import kotlinx.android.synthetic.main.fragment_basic_info.*
 import kotlinx.android.synthetic.main.fragment_basic_info.addCategoryChip
 import kotlinx.android.synthetic.main.fragment_basic_info.bannerImageView

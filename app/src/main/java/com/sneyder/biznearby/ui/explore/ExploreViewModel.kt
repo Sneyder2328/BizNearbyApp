@@ -20,6 +20,7 @@ class ExploreViewModel
     }
 
     fun searchBusinesses(query: String, latitude: Double, longitude: Double, radius: Int) {
+        resultBusinesses.value = Result()
         viewModelScope.launch {
             val result = businessRepository.searchBusinesses(query, latitude, longitude, radius)
             resultBusinesses.value = result

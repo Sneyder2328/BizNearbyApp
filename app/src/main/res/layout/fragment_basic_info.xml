@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.add_business.basic_info.BasicInfoFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

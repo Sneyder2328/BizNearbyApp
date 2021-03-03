@@ -33,7 +33,6 @@
         <item name="android:paddingRight">12dp</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
-        <item name="android:background">@drawable/background_bordered</item>
     </style>
 
     <style name="CustomFormLabel">

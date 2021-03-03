@@ -148,12 +148,21 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
     private fun observeResultsBusinesses() {
         viewModel.resultBusinesses.observe(viewLifecycleOwner) {
             debug("observe results = $it")
-            it.success?.let { results ->
-                resultsAdapter.results = results
-                if (results.count() > 0) {
-                    viewInMap.visibility = View.VISIBLE
-                    closeResultsButton.visibility = View.VISIBLE
-                    resultsRecyclerView.visibility = View.VISIBLE
+            when {
+                it.isLoading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+                it.success != null -> {
+                    resultsAdapter.results = it.success
+                    if (it.success.count() > 0) {
+                        viewInMap.visibility = View.VISIBLE
+                        closeResultsButton.visibility = View.VISIBLE
+                        resultsRecyclerView.visibility = View.VISIBLE
+                    }
+                    progressBar.visibility = View.GONE
+                }
+                else -> {
+                    progressBar.visibility = View.GONE
                 }
             }
         }

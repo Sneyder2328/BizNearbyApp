@@ -14,4 +14,17 @@
         <item name="android:statusBarColor">?colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="CustomForm.Input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_height">@dimen/input_height</item>
+        <item name="android:minHeight">@dimen/input_height</item>
+        <item name="android:textSize">@dimen/input_font_size</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:background">@drawable/background_bordered</item>
+    </style>
+
 </resources>
