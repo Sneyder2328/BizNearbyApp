@@ -7,6 +7,7 @@ import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.business.BizResult
 import com.sneyder.biznearby.data.repository.BusinessRepository
 import com.sneyder.biznearby.utils.base.BaseViewModel
+import com.sneyder.biznearby.utils.debug
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ class ExploreViewModel
     }
 
     fun searchBusinesses(query: String, latitude: Double, longitude: Double, radius: Int) {
+        debug("viewmodel searchBusinesses  $query  $latitude  $longitude")
         resultBusinesses.value = Result()
         viewModelScope.launch {
             val result = businessRepository.searchBusinesses(query, latitude, longitude, radius)

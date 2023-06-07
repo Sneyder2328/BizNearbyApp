@@ -4,6 +4,7 @@ import com.sneyder.biznearby.data.api.BizNearbyApi
 import com.sneyder.biznearby.data.model.Result
 import com.sneyder.biznearby.data.model.business.*
 import com.sneyder.biznearby.data.preferences.PreferencesHelper
+import com.sneyder.biznearby.utils.debug
 import com.sneyder.biznearby.utils.getMimeType
 import com.sneyder.biznearby.utils.safeApiCall
 import okhttp3.MediaType
@@ -36,6 +37,7 @@ class AppBusinessRepository
         longitude: Double,
         radius: Int
     ): Result<ArrayList<BizResult>> {
+        debug("searchBusinesses API")
         return safeApiCall({
             bizNearbyApi.searchBusinesses(query, latitude, longitude, radius)
         })

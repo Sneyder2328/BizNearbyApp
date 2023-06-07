@@ -9,11 +9,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,18 +21,18 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
-import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.R
 import com.sneyder.biznearby.ui.business_details.BusinessDetailsActivity
 import com.sneyder.biznearby.ui.explore.results.ResultsAdapter
+import com.sneyder.biznearby.utils.base.DaggerFragment
 import com.sneyder.biznearby.utils.debug
 import com.sneyder.biznearby.utils.getLocationProvider
 import com.sneyder.biznearby.utils.locationManager
 import com.sneyder.biznearby.utils.throttleLatest
 import kotlinx.android.synthetic.main.fragment_explore.*
-import java.lang.Exception
 
-class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
+
+class ExploreFragment : DaggerFragment(), OnMapReadyCallback {
 
     private val viewModel: ExploreViewModel by viewModels { viewModelFactory }
     private var googleMap: GoogleMap? = null
@@ -202,12 +202,20 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
         )
     }
 
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+
     @SuppressLint("MissingPermission")
     private fun displayUserLocation() {
+        debug("displayUserLocation")
         val locManager = requireContext().locationManager()
+        debug("locManager=$locManager")
 
+        val locationProvider = getLocationProvider(locManager)
+        debug("locationProvider $locationProvider")
         val location = locManager.getLastKnownLocation(
-            getLocationProvider(locManager) ?: return
+            locationProvider ?: return
         )
         if (location != null) {
             debug("my location= $location")
@@ -220,26 +228,47 @@ class ExploreFragment : DaggerFragment(), OnMapReadyCallback, LocationListener {
 
     @SuppressLint("MissingPermission")
     private fun registerLocationListener(locationManager: LocationManager?) {
-        locationManager?.requestSingleUpdate(
-            getLocationProvider(locationManager) ?: return,
-            this,
-            null
-        )
+        debug("registerLocationListener new")
+        val locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY) //GPS quality location points
+            .setNumUpdates(1)
+            .setInterval(2000) //At least once every 2 seconds
+            .setFastestInterval(1000);
+
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                debug("onLocationResult $locationResult")
+                for (location in locationResult.locations) {
+                    debug("$location")
+                    if (location == null) return
+                    currentLatLng = LatLng(location.latitude, location.longitude)
+                    moveMapCamera()
+                }
+            }
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+//        locationManager?.requestSingleUpdate(
+//            getLocationProvider(locationManager) ?: return,
+//            this,
+//            null
+//        )
     }
 
-    override fun onLocationChanged(location: Location?) {
-        debug("ExploreFr onLocationChanged $location")
-        if (location == null) return
-        currentLatLng = LatLng(location.latitude, location.longitude)
-        moveMapCamera()
-    }
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    override fun onProviderEnabled(provider: String?) {}
-    override fun onProviderDisabled(provider: String?) {}
+//    override fun onLocationChanged(location: Location?) {
+//        debug("ExploreFr onLocationChanged $location")
+//        if (location == null) return
+//        currentLatLng = LatLng(location.latitude, location.longitude)
+//        moveMapCamera()
+//    }
+//
+//    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+//    override fun onProviderEnabled(provider: String?) {}
+//    override fun onProviderDisabled(provider: String?) {}
 
     private fun moveMapCamera() {
         if (currentLatLng == null) return
+        debug("moveMapCamera $currentLatLng")
         val cameraPosition = CameraPosition.Builder()
             .target(currentLatLng) // Sets the center of the map to the user's location
             .zoom(17f)            // Sets the zoom
